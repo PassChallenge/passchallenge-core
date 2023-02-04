@@ -7,12 +7,12 @@
         <AssemblyName>KillDNS.CaptchaSolver.Core</AssemblyName>
         <RootNamespace>KillDNS.CaptchaSolver.Core</RootNamespace>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Version>0.0.1</Version>
+        <Version>0.0.2</Version>
         <Title>KillDNS.CaptchaSolver.Core</Title>
         <Authors>KillDNS</Authors>
         <Description>Base library included captcha solver/resolver and base captcha types.</Description>
         <PackageIcon>logo_128.png</PackageIcon>
-        <AssemblyVersion>0.0.1</AssemblyVersion>
+        <AssemblyVersion>0.0.2</AssemblyVersion>
     </PropertyGroup>
 
     <ItemGroup>
