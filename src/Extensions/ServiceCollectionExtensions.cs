@@ -1,7 +1,6 @@
 using System;
-using System.Linq;
-using System.Reflection;
 using KillDNS.CaptchaSolver.Core.Producer;
+using KillDNS.CaptchaSolver.Core.Solver;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace KillDNS.CaptchaSolver.Core.Extensions;
@@ -12,37 +11,14 @@ public static class ServiceCollectionExtensions
         Action<CaptchaSolverBuilder<TProducer>> configure, ServiceLifetime lifetime = ServiceLifetime.Scoped)
         where TProducer : IProducer
     {
-        CaptchaSolverBuilder<TProducer> builder = new(serviceCollection);
+        CaptchaSolverBuilder<TProducer> builder = new();
         configure.Invoke(builder);
 
         serviceCollection.Add(new ServiceDescriptor(typeof(ICaptchaSolverFactory), provider =>
-            new CaptchaSolverFactory(CreateProducer(provider)), lifetime));
+            new CaptchaSolverFactory(builder.Build(provider)), lifetime));
 
         return serviceCollection;
-
-        IProducer CreateProducer(IServiceProvider provider)
-        {
-            var parameters = typeof(TProducer).GetConstructors(BindingFlags.Instance | BindingFlags.Public)[0]
-                .GetParameters()
-                .Select(x => provider.GetRequiredService(x.ParameterType)).ToArray();
-
-            IProducer producer = (IProducer)Activator.CreateInstance(typeof(TProducer), parameters);
-
-            if (producer is IProducerWithSpecifiedCaptchaAndSolutions specifiedProducer)
-            {
-                specifiedProducer.SetAvailableCaptchaAndSolutionTypes(builder.AvailableCaptchaAndSolutionTypes);
-            }
-
-            foreach (var configureProducerAction in builder.ConfigureProducerActions)
-            {
-                configureProducerAction?.Invoke((TProducer)producer);
-            }
-
-            return producer;
-        }
     }
-
-
 
 
     /*public static IServiceCollection AddCaptchaResolver(this IServiceCollection serviceCollection,
@@ -65,5 +41,4 @@ public static class ServiceCollectionExtensions
         serviceCollection.AddHostedService<ResolverHostedService>();
         return serviceCollection;
     }*/
-
 }

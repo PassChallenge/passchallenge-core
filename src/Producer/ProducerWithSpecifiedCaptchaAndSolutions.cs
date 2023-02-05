@@ -15,22 +15,14 @@ public abstract class ProducerWithSpecifiedCaptchaAndSolutions : IProducerWithSp
     public virtual void SetAvailableCaptchaAndSolutionTypes(
         IReadOnlyDictionary<Type, IReadOnlyCollection<Type>> availableCaptchaAndSolutionTypes)
     {
-        _availableCaptchaAndSolutionTypes = availableCaptchaAndSolutionTypes;
+        _availableCaptchaAndSolutionTypes = availableCaptchaAndSolutionTypes ??
+                                            throw new ArgumentNullException(nameof(availableCaptchaAndSolutionTypes));
     }
 
     public virtual bool CanProduce<TCaptcha, TSolution>() where TCaptcha : ICaptcha where TSolution : ISolution
     {
-        if (_availableCaptchaAndSolutionTypes.Count == 0)
-            return true;
-
-        if (!_availableCaptchaAndSolutionTypes.ContainsKey(typeof(TCaptcha)))
-            return false;
-
-        if (_availableCaptchaAndSolutionTypes[typeof(TCaptcha)] is ISet<Type> settedValue &&
-            settedValue.Contains(typeof(TSolution)))
-            return true;
-
-        return _availableCaptchaAndSolutionTypes[typeof(TCaptcha)].Contains(typeof(TSolution));
+        return _availableCaptchaAndSolutionTypes.TryGetValue(typeof(TCaptcha),
+            out IReadOnlyCollection<Type> solutionTypes) && solutionTypes.Contains(typeof(TSolution));
     }
 
     public abstract Task<TSolution> ProduceAndWaitSolution<TCaptcha, TSolution>(TCaptcha captcha,

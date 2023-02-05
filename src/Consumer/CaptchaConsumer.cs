@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using KillDNS.CaptchaSolver.Core.Captcha;
@@ -6,11 +7,12 @@ using KillDNS.CaptchaSolver.Core.Solutions;
 
 namespace KillDNS.CaptchaSolver.Core.Consumer;
 
+//TODO: WIP
 public class CaptchaConsumer<TCaptcha, TSolution> : IConsumer where TCaptcha : ICaptcha where TSolution : ISolution
 {
     private readonly ICaptchaHandler<TCaptcha, TSolution> _captchaHandler;
-    private readonly CancellationTokenSource _cts;
     private readonly TaskCompletionSource<int> _consumingStoppedTcs;
+    private readonly CancellationTokenSource _cts;
 
     public CaptchaConsumer(IConsumer d, ICaptchaHandler<TCaptcha, TSolution> captchaHandler)
     {
@@ -23,17 +25,16 @@ public class CaptchaConsumer<TCaptcha, TSolution> : IConsumer where TCaptcha : I
     {
         await Task.Yield();
         CancellationToken cancellationToken = _cts.Token;
-        
+
         while (!cancellationToken.IsCancellationRequested)
         {
-            
         }
 
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 
     public Task Stop()
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 }

@@ -7,8 +7,8 @@ namespace KillDNS.CaptchaSolver.Core.Producer;
 
 public interface IProducerWithSpecifiedCaptchaAndSolutions : IProducer
 {
-    public void SetAvailableCaptchaAndSolutionTypes(
+    void SetAvailableCaptchaAndSolutionTypes(
         IReadOnlyDictionary<Type, IReadOnlyCollection<Type>> availableCaptchaAndSolutionTypes);
 
-    public bool CanProduce<TCaptcha, TSolution>() where TCaptcha : ICaptcha where TSolution : ISolution;
+    bool CanProduce<TCaptcha, TSolution>() where TCaptcha : ICaptcha where TSolution : ISolution;
 }

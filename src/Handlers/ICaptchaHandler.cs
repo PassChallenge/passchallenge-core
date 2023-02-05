@@ -8,5 +8,5 @@ namespace KillDNS.CaptchaSolver.Core.Handlers;
 public interface ICaptchaHandler<in TCaptcha, TSolution> where TCaptcha : ICaptcha
     where TSolution : ISolution
 {
-    public Task<TSolution> Handle(TCaptcha captcha, CancellationToken cancellationToken = default);
+    Task<TSolution> Handle(TCaptcha captcha, CancellationToken cancellationToken = default);
 }

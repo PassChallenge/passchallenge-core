@@ -6,8 +6,8 @@ namespace KillDNS.CaptchaSolver.Core.Handlers;
 
 public interface ICaptchaHandlerFactory
 {
-    public ICaptchaHandler<TCaptcha, TSolution> CreateHandler<TCaptcha, TSolution>(
-        IServiceProvider serviceProvider) 
+    ICaptchaHandler<TCaptcha, TSolution> CreateHandler<TCaptcha, TSolution>(
+        IServiceProvider serviceProvider)
         where TCaptcha : ICaptcha
         where TSolution : ISolution;
 }

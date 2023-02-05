@@ -8,6 +8,6 @@ public class PictureCaptcha : ICaptcha
     {
         ImageData = imageData ?? throw new ArgumentNullException(nameof(imageData));
     }
-    
+
     public byte[] ImageData { get; }
 }

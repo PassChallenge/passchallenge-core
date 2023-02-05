@@ -7,7 +7,7 @@ namespace KillDNS.CaptchaSolver.Core.Producer;
 
 public interface IProducer
 {
-    public Task<TSolution> ProduceAndWaitSolution<TCaptcha, TSolution>(TCaptcha captcha,
+    Task<TSolution> ProduceAndWaitSolution<TCaptcha, TSolution>(TCaptcha captcha,
         CancellationToken cancellationToken = default) where TCaptcha : ICaptcha
         where TSolution : ISolution;
 }

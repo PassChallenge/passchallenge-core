@@ -1,5 +1,6 @@
 using KillDNS.CaptchaSolver.Core.Handlers;
 using KillDNS.CaptchaSolver.Core.Producer;
+using KillDNS.CaptchaSolver.Core.Solver;
 
 namespace KillDNS.CaptchaSolver.Core.Extensions;
 

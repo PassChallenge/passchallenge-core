@@ -1,2 +1,2 @@
 # captcha-solver-core
-Base library included captcha solver/resolver and base captcha types.
+The core library provides the foundation for custom captcha solvers/resolvers.
