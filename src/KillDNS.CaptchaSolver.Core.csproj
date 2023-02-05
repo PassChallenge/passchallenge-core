@@ -7,15 +7,16 @@
         <AssemblyName>KillDNS.CaptchaSolver.Core</AssemblyName>
         <RootNamespace>KillDNS.CaptchaSolver.Core</RootNamespace>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Version>0.0.3</Version>
+        <Version>0.0.4</Version>
         <Title>KillDNS.CaptchaSolver.Core</Title>
         <Authors>Kirill Danshin</Authors>
         <Description>The core library provides the foundation for custom captcha solvers/resolvers.</Description>
         <PackageIcon>logo_128.png</PackageIcon>
-        <AssemblyVersion>0.0.2</AssemblyVersion>
+        <AssemblyVersion>0.0.4</AssemblyVersion>
         <Copyright>Copyright (c) 2023 Kirill Danshin</Copyright>
-        <PackageLicenseUrl>https://raw.githubusercontent.com/KillDNS-Captcha-Solver/captcha-solver-core/master/LICENSE</PackageLicenseUrl>
         <RepositoryUrl>https://github.com/KillDNS-Captcha-Solver/captcha-solver-core</RepositoryUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
     </PropertyGroup>
 
     <ItemGroup>
@@ -33,5 +34,7 @@
             <PackagePath></PackagePath>
             <Link>logo_128.png</Link>
         </None>
+        <None Include="..\README.md" Pack="true" PackagePath="\"/>
+        <None Include="..\LICENSE" Pack="true" PackagePath=""/>
     </ItemGroup>
 </Project>
