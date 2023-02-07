@@ -1,14 +1,25 @@
+using System;
+using KillDNS.CaptchaSolver.Core.Captcha;
 using KillDNS.CaptchaSolver.Core.Handlers;
 using KillDNS.CaptchaSolver.Core.Producer;
+using KillDNS.CaptchaSolver.Core.Solutions;
 using KillDNS.CaptchaSolver.Core.Solver;
 
 namespace KillDNS.CaptchaSolver.Core.Extensions;
 
 public static class CaptchaSolverBuilderExtensions
 {
-    public static void SetProducerHandlerFactory<TProducer>(this CaptchaSolverBuilder<TProducer> builder,
+    public static CaptchaSolverBuilder<TProducer> SetCaptchaHandlerFactory<TProducer>(this CaptchaSolverBuilder<TProducer> builder,
         ICaptchaHandlerFactory captchaHandlerFactory) where TProducer : IProducerWithCaptchaHandlerFactory
     {
-        builder.AddConfigureProducerAction(factory => factory.SetCaptchaHandlerFactory(captchaHandlerFactory));
+        if (builder == null)
+            throw new ArgumentNullException(nameof(builder));
+
+        if (captchaHandlerFactory == null)
+            throw new ArgumentNullException(nameof(captchaHandlerFactory));
+
+        builder.AddConfigureProducerAction(producer => producer.SetCaptchaHandlerFactory(captchaHandlerFactory));
+
+        return builder;
     }
 }

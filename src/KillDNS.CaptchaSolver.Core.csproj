@@ -7,18 +7,24 @@
         <AssemblyName>KillDNS.CaptchaSolver.Core</AssemblyName>
         <RootNamespace>KillDNS.CaptchaSolver.Core</RootNamespace>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Version>0.0.6</Version>
+        <Version>0.0.7</Version>
         <Title>KillDNS.CaptchaSolver.Core</Title>
         <Authors>Kirill Danshin</Authors>
         <Description>The core library provides the foundation for custom captcha solvers/resolvers.</Description>
         <PackageIcon>logo_128.png</PackageIcon>
-        <AssemblyVersion>0.0.6</AssemblyVersion>
+        <AssemblyVersion>0.0.7</AssemblyVersion>
         <Copyright>Copyright (c) 2023 Kirill Danshin</Copyright>
         <RepositoryUrl>https://github.com/KillDNS-Captcha-Solver/captcha-solver-core</RepositoryUrl>
         <PackageProjectUrl>https://github.com/KillDNS-Captcha-Solver/captcha-solver-core</PackageProjectUrl>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
     </PropertyGroup>
+    
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+            <_Parameter1>$(AssemblyName).Tests</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
@@ -35,7 +41,7 @@
             <PackagePath></PackagePath>
             <Link>logo_128.png</Link>
         </None>
-        <None Include="..\README.md" Pack="true" PackagePath="\"/>
-        <None Include="..\LICENSE" Pack="true" PackagePath=""/>
+        <None Include="..\README.md" Pack="true" PackagePath="\" />
+        <None Include="..\LICENSE" Pack="true" PackagePath="" />
     </ItemGroup>
 </Project>

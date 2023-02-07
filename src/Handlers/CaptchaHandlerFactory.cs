@@ -13,10 +13,12 @@ public class CaptchaHandlerFactory : ICaptchaHandlerFactory
 {
     private readonly IReadOnlyDictionary<(Type captchaType, Type solutionType), CaptchaHandlerDescriptor> _handlerTypes;
 
-    public CaptchaHandlerFactory(
-        IReadOnlyDictionary<(Type captchaType, Type solutionType), CaptchaHandlerDescriptor> handlerTypes)
+    public CaptchaHandlerFactory(IEnumerable<CaptchaHandlerDescriptor> handlers)
     {
-        _handlerTypes = handlerTypes ?? throw new ArgumentNullException(nameof(handlerTypes));
+        if (handlers == null)
+            throw new ArgumentNullException(nameof(handlers));
+
+        _handlerTypes = handlers.ToDictionary(x => (x.CaptchaType, x.SolutionType), x => x);
     }
 
     public ICaptchaHandler<TCaptcha, TSolution> CreateHandler<TCaptcha, TSolution>(IServiceProvider serviceProvider)

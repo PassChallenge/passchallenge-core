@@ -8,15 +8,43 @@ namespace KillDNS.CaptchaSolver.Core.Extensions;
 public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddCaptchaSolver<TProducer>(this IServiceCollection serviceCollection,
+        ServiceLifetime lifetime = ServiceLifetime.Scoped)
+        where TProducer : class, IProducer
+    {
+        return AddCaptchaSolver<TProducer>(serviceCollection, _ => { }, lifetime);
+    }
+    
+    public static IServiceCollection AddCaptchaSolver<TProducer>(this IServiceCollection serviceCollection,
         Action<CaptchaSolverBuilder<TProducer>> configure, ServiceLifetime lifetime = ServiceLifetime.Scoped)
         where TProducer : IProducer
     {
         CaptchaSolverBuilder<TProducer> builder = new();
         configure.Invoke(builder);
 
+        AddFactoryToServiceCollection(serviceCollection, builder, lifetime);
+
+        return serviceCollection;
+    }
+    
+    public static IServiceCollection AddCaptchaSolver<TProducer>(this IServiceCollection serviceCollection,
+        Action<CaptchaSolverSpecifiedBuilder<TProducer>> configure, ServiceLifetime lifetime = ServiceLifetime.Scoped)
+        where TProducer : IProducerWithSpecifiedCaptchaAndSolutions
+    {
+        CaptchaSolverSpecifiedBuilder<TProducer> builder = new();
+        configure.Invoke(builder);
+
+        AddFactoryToServiceCollection(serviceCollection, builder, lifetime);
+
+        return serviceCollection;
+    }
+
+    private static IServiceCollection AddFactoryToServiceCollection<TProducer>(IServiceCollection serviceCollection,
+        CaptchaSolverBuilder<TProducer> builder, ServiceLifetime lifetime)
+        where TProducer : IProducer
+    {
         serviceCollection.Add(new ServiceDescriptor(typeof(ICaptchaSolverFactory), provider =>
             new CaptchaSolverFactory(builder.Build(provider)), lifetime));
-
+        
         return serviceCollection;
     }
 
