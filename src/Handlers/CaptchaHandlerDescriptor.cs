@@ -71,7 +71,7 @@ public class CaptchaHandlerDescriptor
 
         if (SolverFunction != null)
         {
-            return result + ". Has solver function";
+            return result + ". Has handler function.";
         }
 
         if (HandlerType != null)

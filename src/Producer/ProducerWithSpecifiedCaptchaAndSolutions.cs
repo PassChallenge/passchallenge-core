@@ -10,7 +10,7 @@ namespace KillDNS.CaptchaSolver.Core.Producer;
 
 public abstract class ProducerWithSpecifiedCaptchaAndSolutions : IProducerWithSpecifiedCaptchaAndSolutions
 {
-    private IReadOnlyDictionary<Type, IReadOnlyCollection<Type>> _availableCaptchaAndSolutionTypes = null!;
+    private IReadOnlyDictionary<Type, IReadOnlyCollection<Type>>? _availableCaptchaAndSolutionTypes;
 
     public virtual void SetAvailableCaptchaAndSolutionTypes(
         IReadOnlyDictionary<Type, IReadOnlyCollection<Type>> availableCaptchaAndSolutionTypes)
@@ -21,8 +21,8 @@ public abstract class ProducerWithSpecifiedCaptchaAndSolutions : IProducerWithSp
 
     public virtual bool CanProduce<TCaptcha, TSolution>() where TCaptcha : ICaptcha where TSolution : ISolution
     {
-        return _availableCaptchaAndSolutionTypes.TryGetValue(typeof(TCaptcha),
-            out IReadOnlyCollection<Type> solutionTypes) && solutionTypes.Contains(typeof(TSolution));
+        return (_availableCaptchaAndSolutionTypes?.TryGetValue(typeof(TCaptcha),
+            out IReadOnlyCollection<Type> solutionTypes) ?? false) && solutionTypes.Contains(typeof(TSolution));
     }
 
     public abstract Task<TSolution> ProduceAndWaitSolution<TCaptcha, TSolution>(TCaptcha captcha,
