@@ -4,6 +4,7 @@ using KillDNS.CaptchaSolver.Core.Handlers;
 using KillDNS.CaptchaSolver.Core.Producer;
 using KillDNS.CaptchaSolver.Core.Solutions;
 using KillDNS.CaptchaSolver.Core.Solver;
+using KillDNS.CaptchaSolver.Core.Tests.Tools;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
@@ -34,14 +35,15 @@ public class ServiceCollectionExtensionsTests
     [TestCase(ServiceLifetime.Transient)]
     [TestCase(ServiceLifetime.Scoped)]
     [TestCase(ServiceLifetime.Singleton)]
-    public void AddCaptchaSolver_SpecifiedSolver_ServiceCollection_AddMethod_Is_Called(ServiceLifetime lifetime)
+    public void AddSpecifiedCaptchaSolver_SpecifiedSolver_ServiceCollection_AddMethod_Is_Called(
+        ServiceLifetime lifetime)
     {
         Mock<IServiceCollection> mock = new();
         mock.Setup(x => x.Add(It.IsAny<ServiceDescriptor>()));
 
-        mock.Object.AddCaptchaSolver<IProducerWithSpecifiedCaptchaAndSolutions>(builder =>
+        mock.Object.AddSpecifiedCaptchaSolver<IProducerWithSpecifiedCaptchaAndSolutions>(builder =>
         {
-            builder.AddSupportCaptchaAndSolution(
+            builder.AvailableCaptchaAndSolutionStorageBuilder.AddSupportCaptchaAndSolution(
                 CaptchaHandlerDescriptor.Create<ICaptcha, ISolution>((_, _) =>
                     It.IsAny<Task<ISolution>>()));
         }, lifetime);
@@ -75,5 +77,39 @@ public class ServiceCollectionExtensionsTests
         Mock<IServiceCollection> mock = new();
         mock.Object.AddCaptchaSolver<IProducer>(_ => { }, It.IsAny<ServiceLifetime>());
         mock.Verify(x => x.Add(It.IsAny<ServiceDescriptor>()), Times.Once());
+    }
+
+    [Test]
+    public void AddFactoryToServiceCollection_Is_Correct()
+    {
+        Mock<IServiceCollection> mock = new();
+        Mock<IServiceProvider> providerMock = new();
+
+
+        AvailableCaptchaAndSolutionStorage availableCaptchaAndSolutionStorage = new(
+            new Dictionary<Type, Dictionary<Type, HashSet<string>>>
+            {
+                {
+                    typeof(TestCaptcha), new Dictionary<Type, HashSet<string>>
+                    {
+                        { typeof(TestSolution), new HashSet<string>() }
+                    }
+                }
+            });
+
+        mock.Object.AddSpecifiedCaptchaSolver<TestSpecifiedProducerBase>(
+            builder =>
+            {
+                builder.AvailableCaptchaAndSolutionStorageBuilder.SetStorage(availableCaptchaAndSolutionStorage);
+            }, It.IsAny<ServiceLifetime>());
+
+        mock.Verify(x => x.Add(It.Is<ServiceDescriptor>((o, type) =>
+            o is ServiceDescriptor &&
+            ((ServiceDescriptor)o).ImplementationFactory!.Invoke(providerMock.Object) is CaptchaSolverFactory &&
+            ((CaptchaSolverFactory)((ServiceDescriptor)o).ImplementationFactory!.Invoke(providerMock.Object))
+            .CanCreateSolver<ICaptcha, ISolution>(It.IsAny<string>()) == false &&
+            ((CaptchaSolverFactory)((ServiceDescriptor)o).ImplementationFactory!.Invoke(providerMock.Object))
+            .CanCreateSolver<TestCaptcha, TestSolution>(It.IsAny<string>()) == true
+        )), Times.Once());
     }
 }

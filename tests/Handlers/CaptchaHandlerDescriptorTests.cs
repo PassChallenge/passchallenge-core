@@ -100,7 +100,7 @@ public class CaptchaHandlerDescriptorTests
 
         string expected =
             $"{captchaHandlerDescriptor.CaptchaType}: {captchaHandlerDescriptor.SolutionType}, Handler: {captchaHandlerDescriptor.HandlerType}, " +
-            $"{nameof(captchaHandlerDescriptor.ImplementationFactory)}: {captchaHandlerDescriptor.ImplementationFactory!.Method}";
+            $"has implementation factory";
         string actual = captchaHandlerDescriptor.ToString();
 
         Assert.That(actual, Is.EqualTo(expected));
@@ -117,5 +117,40 @@ public class CaptchaHandlerDescriptorTests
         string actual = captchaHandlerDescriptor.ToString();
 
         Assert.That(actual, Is.EqualTo(expected));
+    }
+
+    [Test]
+    public void CloneWithNewName_Is_Correct()
+    {
+        CaptchaHandlerDescriptor captchaHandlerDescriptor =
+            CaptchaHandlerDescriptor.Create<TestCaptcha, TestSolution, TestCaptchaHandler>();
+
+        string expectedHandlerName = "handler-name";
+        CaptchaHandlerDescriptor newCaptchaHandlerDescriptor =
+            captchaHandlerDescriptor.CloneWithNewName(expectedHandlerName);
+
+        Assert.That(newCaptchaHandlerDescriptor.HandlerName, Is.EqualTo(expectedHandlerName));
+    }
+
+    [Test]
+    public void CloneWithNewName_When_HandlerName_Is_Null_Throws_ArgumentException()
+    {
+        CaptchaHandlerDescriptor captchaHandlerDescriptor =
+            CaptchaHandlerDescriptor.Create<TestCaptcha, TestSolution, TestCaptchaHandler>();
+
+        string expectedHandlerName = null!;
+        Assert.Throws<ArgumentException>(() =>
+            captchaHandlerDescriptor.CloneWithNewName(expectedHandlerName));
+    }
+
+    [Test]
+    public void CloneWithNewName_When_HandlerName_Is_WhiteSpace_Throws_ArgumentException()
+    {
+        CaptchaHandlerDescriptor captchaHandlerDescriptor =
+            CaptchaHandlerDescriptor.Create<TestCaptcha, TestSolution, TestCaptchaHandler>();
+
+        string expectedHandlerName = "";
+        Assert.Throws<ArgumentException>(() =>
+            captchaHandlerDescriptor.CloneWithNewName(expectedHandlerName));
     }
 }

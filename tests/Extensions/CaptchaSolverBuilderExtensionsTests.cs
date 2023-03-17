@@ -1,7 +1,5 @@
-using KillDNS.CaptchaSolver.Core.Captcha;
 using KillDNS.CaptchaSolver.Core.Extensions;
 using KillDNS.CaptchaSolver.Core.Handlers;
-using KillDNS.CaptchaSolver.Core.Solutions;
 using KillDNS.CaptchaSolver.Core.Solver;
 using KillDNS.CaptchaSolver.Core.Tests.Tools;
 using Moq;
@@ -17,11 +15,7 @@ public class CaptchaSolverBuilderExtensionsTests
         IServiceProvider serviceProvider = new Mock<IServiceProvider>().Object;
 
         CaptchaSolverBuilder<TestProducerWithCaptchaHandlerFactory> builder = new();
-
-        CaptchaHandlerDescriptor descriptor =
-            CaptchaHandlerDescriptor.Create<ICaptcha, ISolution>((_, _) => It.IsAny<Task<ISolution>>());
-
-        builder.SetCaptchaHandlerFactory(new CaptchaHandlerFactory(new[] { descriptor }));
+        builder.SetCaptchaHandlerFactory(new Mock<ICaptchaHandlerFactory>().Object);
         builder.Build(serviceProvider);
 
         Assert.Pass();

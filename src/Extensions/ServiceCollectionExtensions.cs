@@ -13,7 +13,7 @@ public static class ServiceCollectionExtensions
     {
         return AddCaptchaSolver<TProducer>(serviceCollection, _ => { }, lifetime);
     }
-    
+
     public static IServiceCollection AddCaptchaSolver<TProducer>(this IServiceCollection serviceCollection,
         Action<CaptchaSolverBuilder<TProducer>> configure, ServiceLifetime lifetime = ServiceLifetime.Scoped)
         where TProducer : IProducer
@@ -25,8 +25,8 @@ public static class ServiceCollectionExtensions
 
         return serviceCollection;
     }
-    
-    public static IServiceCollection AddCaptchaSolver<TProducer>(this IServiceCollection serviceCollection,
+
+    public static IServiceCollection AddSpecifiedCaptchaSolver<TProducer>(this IServiceCollection serviceCollection,
         Action<CaptchaSolverSpecifiedBuilder<TProducer>> configure, ServiceLifetime lifetime = ServiceLifetime.Scoped)
         where TProducer : IProducerWithSpecifiedCaptchaAndSolutions
     {
@@ -38,14 +38,12 @@ public static class ServiceCollectionExtensions
         return serviceCollection;
     }
 
-    private static IServiceCollection AddFactoryToServiceCollection<TProducer>(IServiceCollection serviceCollection,
+    private static void AddFactoryToServiceCollection<TProducer>(IServiceCollection serviceCollection,
         CaptchaSolverBuilder<TProducer> builder, ServiceLifetime lifetime)
         where TProducer : IProducer
     {
         serviceCollection.Add(new ServiceDescriptor(typeof(ICaptchaSolverFactory), provider =>
             new CaptchaSolverFactory(builder.Build(provider)), lifetime));
-        
-        return serviceCollection;
     }
 
 

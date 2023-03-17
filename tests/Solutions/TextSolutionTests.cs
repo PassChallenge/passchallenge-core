@@ -21,4 +21,17 @@ public class TextSolutionTests
             Assert.That(solution.ResultType, Is.EqualTo(solutionResultType));
         });
     }
+
+    [Test]
+    public void ErrorSolution_Is_Correct()
+    {
+        string expectedErrorMessage = "test";
+        TextSolution solution = TextSolution.ErrorSolution(expectedErrorMessage);
+        Assert.Multiple(() =>
+        {
+            Assert.Null(solution.Answer);
+            Assert.That(solution.ErrorMessage, Is.EqualTo(expectedErrorMessage));
+            Assert.That(solution.ResultType, Is.EqualTo(SolutionResultType.Error));
+        });
+    }
 }

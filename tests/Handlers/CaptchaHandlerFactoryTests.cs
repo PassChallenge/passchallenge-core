@@ -10,14 +10,14 @@ namespace KillDNS.CaptchaSolver.Core.Tests.Handlers;
 public class CaptchaHandlerFactoryTests
 {
     [Test]
-    public void CaptchaHandlerFactory_Constructor_Is_Correct()
+    public void Constructor_Is_Correct()
     {
-        CaptchaHandlerFactory _ = new(Array.Empty<CaptchaHandlerDescriptor>());
+        CaptchaHandlerFactory _ = new(new Mock<ICaptchaHandlerDescriptorStorage>().Object);
         Assert.Pass();
     }
 
     [Test]
-    public void CaptchaHandlerFactory_Constructor_Handlers_Is_Null_Throws_ArgumentNullException()
+    public void Constructor_Handlers_Is_Null_Throws_ArgumentNullException()
     {
         // ReSharper disable once ObjectCreationAsStatement
         Assert.Throws<ArgumentNullException>(() => new CaptchaHandlerFactory(null!));
@@ -26,16 +26,8 @@ public class CaptchaHandlerFactoryTests
     [Test]
     public void CreateHandler_ServiceProvider_Is_Null_Throws_ArgumentNullException()
     {
-        CaptchaHandlerFactory factory = new(Array.Empty<CaptchaHandlerDescriptor>());
+        CaptchaHandlerFactory factory = new(new Mock<ICaptchaHandlerDescriptorStorage>().Object);
         Assert.Throws<ArgumentNullException>(() => factory.CreateHandler<ICaptcha, ISolution>(null!));
-    }
-
-    [Test]
-    public void CreateHandler_HandlerTypes_Not_Contains_Captcha_Pair_Throws_InvalidOperationException()
-    {
-        Mock<IServiceProvider> mock = new();
-        CaptchaHandlerFactory factory = new(Array.Empty<CaptchaHandlerDescriptor>());
-        Assert.Throws<InvalidOperationException>(() => factory.CreateHandler<ICaptcha, ISolution>(mock.Object));
     }
 
     [Test]
@@ -48,10 +40,14 @@ public class CaptchaHandlerFactoryTests
         CaptchaHandlerDescriptor descriptor =
             CaptchaHandlerDescriptor.Create<ICaptcha, ISolution>((_, _) => funcMock.Object.Invoke());
 
-        CaptchaHandlerFactory factory = new(new[] { descriptor });
+        Mock<ICaptchaHandlerDescriptorStorage> handlerDescriptorMock = new();
+        handlerDescriptorMock.Setup(x => x.GetDescriptor<ICaptcha, ISolution>(It.IsAny<string?>()))
+            .Returns(descriptor);
+
+        CaptchaHandlerFactory factory = new(handlerDescriptorMock.Object);
 
         ICaptchaHandler<ICaptcha, ISolution> handler = factory.CreateHandler<ICaptcha, ISolution>(mock.Object);
-        ISolution solution = await handler.Handle(It.IsAny<ICaptcha>());
+        await handler.Handle(It.IsAny<ICaptcha>());
 
         Assert.IsInstanceOf<FixedCaptchaHandler<ICaptcha, ISolution>>(handler);
         funcMock.Verify(x => x.Invoke(), Times.Once);
@@ -67,7 +63,11 @@ public class CaptchaHandlerFactoryTests
             CaptchaHandlerDescriptor.Create<ICaptcha, ISolution, ICaptchaHandler<ICaptcha, ISolution>>(_ =>
                 handlerMock.Object);
 
-        CaptchaHandlerFactory factory = new(new[] { descriptor });
+        Mock<ICaptchaHandlerDescriptorStorage> handlerDescriptorMock = new();
+        handlerDescriptorMock.Setup(x => x.GetDescriptor<ICaptcha, ISolution>(It.IsAny<string?>()))
+            .Returns(descriptor);
+
+        CaptchaHandlerFactory factory = new(handlerDescriptorMock.Object);
 
         ICaptchaHandler<ICaptcha, ISolution> handler = factory.CreateHandler<ICaptcha, ISolution>(mock.Object);
 
@@ -82,7 +82,11 @@ public class CaptchaHandlerFactoryTests
         CaptchaHandlerDescriptor descriptor =
             CaptchaHandlerDescriptor.Create<TestCaptcha, TestSolution, TestCaptchaHandler>();
 
-        CaptchaHandlerFactory factory = new(new[] { descriptor });
+        Mock<ICaptchaHandlerDescriptorStorage> handlerDescriptorMock = new();
+        handlerDescriptorMock.Setup(x => x.GetDescriptor<TestCaptcha, TestSolution>(It.IsAny<string?>()))
+            .Returns(descriptor);
+
+        CaptchaHandlerFactory factory = new(handlerDescriptorMock.Object);
 
         ICaptchaHandler<TestCaptcha, TestSolution> handler =
             factory.CreateHandler<TestCaptcha, TestSolution>(mock.Object);
@@ -100,7 +104,11 @@ public class CaptchaHandlerFactoryTests
         CaptchaHandlerDescriptor descriptor =
             CaptchaHandlerDescriptor.Create<TestCaptcha, TestSolution, TestCaptchaHandlerWithOneArgument>();
 
-        CaptchaHandlerFactory factory = new(new[] { descriptor });
+        Mock<ICaptchaHandlerDescriptorStorage> handlerDescriptorMock = new();
+        handlerDescriptorMock.Setup(x => x.GetDescriptor<TestCaptcha, TestSolution>(It.IsAny<string?>()))
+            .Returns(descriptor);
+
+        CaptchaHandlerFactory factory = new(handlerDescriptorMock.Object);
 
         ICaptchaHandler<TestCaptcha, TestSolution> handler =
             factory.CreateHandler<TestCaptcha, TestSolution>(mock.Object);
@@ -108,5 +116,64 @@ public class CaptchaHandlerFactoryTests
         Assert.IsInstanceOf<ICaptchaHandler<TestCaptcha, TestSolution>>(handler);
         Assert.IsInstanceOf<TestCaptchaHandlerWithOneArgument>(handler);
         mock.Verify(x => x.GetService(It.Is<Type>(type => type == typeof(object))), Times.Once);
+    }
+
+    [Test]
+    public void GetDefaultHandlerName_Is_Correct()
+    {
+        Mock<ICaptchaHandlerDescriptorStorage> handlerDescriptorMock = new();
+        handlerDescriptorMock.Setup(x => x.GetDefaultDescriptorName<ICaptcha, ISolution>())
+            .Returns(It.IsAny<string>());
+
+        CaptchaHandlerFactory factory = new(handlerDescriptorMock.Object);
+
+        factory.GetDefaultHandlerName<ICaptcha, ISolution>();
+
+        handlerDescriptorMock.Verify(x => x.GetDefaultDescriptorName<ICaptcha, ISolution>(), Times.Once);
+    }
+
+    [Test]
+    public void GetHandlerNames_Is_Correct()
+    {
+        Mock<ICaptchaHandlerDescriptorStorage> handlerDescriptorMock = new();
+        List<string> expectedHandlerNames = new()
+        {
+            "handler-name-1",
+            "handler-name-2"
+        };
+
+        handlerDescriptorMock.Setup(x => x.GetDescriptors<ICaptcha, ISolution>())
+            .Returns(new List<CaptchaHandlerDescriptor>()
+            {
+                CaptchaHandlerDescriptor.Create<ICaptcha, ISolution>((_, _) => Task.FromResult(It.IsAny<ISolution>()),
+                    expectedHandlerNames[0]),
+                CaptchaHandlerDescriptor.Create<ICaptcha, ISolution>((_, _) => Task.FromResult(It.IsAny<ISolution>()),
+                    expectedHandlerNames[1]),
+
+            });
+
+        CaptchaHandlerFactory factory = new(handlerDescriptorMock.Object);
+
+        IReadOnlyCollection<string> actualHandlerNames = factory.GetHandlerNames<ICaptcha, ISolution>();
+
+        handlerDescriptorMock.Verify(x => x.GetDescriptors<ICaptcha, ISolution>(), Times.Once);
+        Assert.That(actualHandlerNames, Is.EquivalentTo(expectedHandlerNames));
+    }
+
+    [Test]
+    public void CanProduce_Is_Correct()
+    {
+        string expectedHandlerName = "handler-name";
+
+        Mock<ICaptchaHandlerDescriptorStorage> handlerDescriptorMock = new();
+        handlerDescriptorMock.Setup(x => x.ContainsDescriptor<ICaptcha, ISolution>(It.IsAny<string>()))
+            .Returns(true);
+
+        CaptchaHandlerFactory factory = new(handlerDescriptorMock.Object);
+
+        factory.CanProduce<ICaptcha, ISolution>(expectedHandlerName);
+
+        handlerDescriptorMock.Verify(
+            x => x.ContainsDescriptor<ICaptcha, ISolution>(It.Is<string>(mo => mo == expectedHandlerName)), Times.Once);
     }
 }

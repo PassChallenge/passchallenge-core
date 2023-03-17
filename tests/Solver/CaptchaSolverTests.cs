@@ -14,7 +14,11 @@ public class CaptchaSolverTests
     public void CaptchaSolver_Constructor_Is_Correct()
     {
         Mock<IProducer> mock = new();
-        Assert.That(new CaptchaSolver<ICaptcha, ISolution>(mock.Object), Is.Not.Null);
+
+        string expectedHandlerName = "handler-name";
+
+        CaptchaSolver<ICaptcha, ISolution> solver = new(mock.Object, expectedHandlerName);
+        Assert.That(solver.HandlerName, Is.EqualTo(expectedHandlerName));
     }
 
     [Test]
@@ -22,6 +26,28 @@ public class CaptchaSolverTests
     {
         // ReSharper disable once ObjectCreationAsStatement
         Assert.Throws<ArgumentNullException>(() => new CaptchaSolver<ICaptcha, ISolution>(null!));
+    }
+
+    [Test]
+    public async Task CaptchaSolver_Constructor_When_Producer_Is_IProducerWithSpecifiedCaptchaAndSolutions()
+    {
+        Mock<IProducerWithSpecifiedCaptchaAndSolutions> mock = new();
+        mock.Setup(x =>
+            x.ProduceAndWaitSolution<ICaptcha, ISolution>(It.IsAny<ICaptcha>(), It.IsAny<string>(),
+                It.IsAny<CancellationToken>()));
+
+        string expectedHandlerName = "handler-name";
+        ICaptcha expectedCaptcha = new TestCaptcha();
+        CancellationToken expectedCancellationToken = new CancellationTokenSource(10).Token;
+
+        CaptchaSolver<ICaptcha, ISolution> solver = new(mock.Object, expectedHandlerName);
+
+        await solver.Solve(expectedCaptcha, expectedCancellationToken);
+
+        mock.Verify(x =>
+            x.ProduceAndWaitSolution<ICaptcha, ISolution>(It.Is<ICaptcha>(mo => mo == expectedCaptcha),
+                It.Is<string>(mo => mo == expectedHandlerName),
+                It.Is<CancellationToken>(mo => mo == expectedCancellationToken)), Times.Once);
     }
 
     [Test]

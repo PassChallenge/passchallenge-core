@@ -6,7 +6,7 @@ using KillDNS.CaptchaSolver.Core.Solutions;
 
 namespace KillDNS.CaptchaSolver.Core.Handlers;
 
-public class FixedCaptchaHandler<TCaptcha, TSolution> : ICaptchaHandler<TCaptcha, TSolution>
+internal class FixedCaptchaHandler<TCaptcha, TSolution> : ICaptchaHandler<TCaptcha, TSolution>
     where TCaptcha : ICaptcha
     where TSolution : ISolution
 {
