@@ -11,7 +11,7 @@ public class TextSolutionTests
     [TestCase(SolutionResultType.Skipped)]
     [TestCase(SolutionResultType.Solved)]
     [TestCase(SolutionResultType.Error)]
-    public void TextSolution_Constructor_Is_Correct(SolutionResultType solutionResultType)
+    public void Constructor_Is_Correct(SolutionResultType solutionResultType)
     {
         string expectedValue = "test";
         TextSolution solution = new(expectedValue, solutionResultType);

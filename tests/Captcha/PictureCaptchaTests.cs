@@ -6,7 +6,7 @@ namespace KillDNS.CaptchaSolver.Core.Tests.Captcha;
 public class PictureCaptchaTests
 {
     [Test]
-    public void PictureCaptchaTests_Constructor_Is_Correct()
+    public void Constructor_Is_Correct()
     {
         byte[] expectedValue = Array.Empty<byte>();
         PictureCaptcha captcha = new(expectedValue);
@@ -14,7 +14,7 @@ public class PictureCaptchaTests
     }
 
     [Test]
-    public void PictureCaptchaTests_Constructor_When_Data_Is_Null_Throws_ArgumentNullException()
+    public void Constructor_When_Data_Is_Null_Throws_ArgumentNullException()
     {
         // ReSharper disable once ObjectCreationAsStatement
         Assert.Throws<ArgumentNullException>(() => new PictureCaptcha(null!));

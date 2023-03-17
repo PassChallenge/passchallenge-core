@@ -11,7 +11,7 @@ namespace KillDNS.CaptchaSolver.Core.Tests.Solver;
 public class CaptchaSolverTests
 {
     [Test]
-    public void CaptchaSolver_Constructor_Is_Correct()
+    public void Constructor_Is_Correct()
     {
         Mock<IProducer> mock = new();
 
@@ -22,14 +22,14 @@ public class CaptchaSolverTests
     }
 
     [Test]
-    public void CaptchaSolver_Constructor_When_Producer_Is_Null_Throws_ArgumentNullException()
+    public void Constructor_When_Producer_Is_Null_Throws_ArgumentNullException()
     {
         // ReSharper disable once ObjectCreationAsStatement
         Assert.Throws<ArgumentNullException>(() => new CaptchaSolver<ICaptcha, ISolution>(null!));
     }
 
     [Test]
-    public async Task CaptchaSolver_Constructor_When_Producer_Is_IProducerWithSpecifiedCaptchaAndSolutions()
+    public async Task Constructor_When_Producer_Is_IProducerWithSpecifiedCaptchaAndSolutions()
     {
         Mock<IProducerWithSpecifiedCaptchaAndSolutions> mock = new();
         mock.Setup(x =>
@@ -51,7 +51,7 @@ public class CaptchaSolverTests
     }
 
     [Test]
-    public async Task CaptchaSolver_Solve_Returns_Solution()
+    public async Task Solve_Returns_Solution()
     {
         TestSolution expectedSolution = new(SolutionResultType.Solved);
 
@@ -73,7 +73,7 @@ public class CaptchaSolverTests
     }
 
     [Test]
-    public void CaptchaSolver_Solve_When_Captcha_Is_Null_Throws_ArgumentNullException()
+    public void Solve_When_Captcha_Is_Null_Throws_ArgumentNullException()
     {
         Mock<IProducer> mock = new();
         CaptchaSolver<ICaptcha, ISolution> solver = new(mock.Object);
