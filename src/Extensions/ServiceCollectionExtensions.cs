@@ -16,7 +16,7 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddCaptchaSolver<TProducer>(this IServiceCollection serviceCollection,
         Action<CaptchaSolverBuilder<TProducer>> configure, ServiceLifetime lifetime = ServiceLifetime.Scoped)
-        where TProducer : IProducer
+        where TProducer : class, IProducer
     {
         CaptchaSolverBuilder<TProducer> builder = new();
         configure.Invoke(builder);
@@ -28,7 +28,7 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddSpecifiedCaptchaSolver<TProducer>(this IServiceCollection serviceCollection,
         Action<CaptchaSolverSpecifiedBuilder<TProducer>> configure, ServiceLifetime lifetime = ServiceLifetime.Scoped)
-        where TProducer : IProducerWithSpecifiedCaptchaAndSolutions
+        where TProducer : class, IProducerWithSpecifiedCaptchaAndSolutions
     {
         CaptchaSolverSpecifiedBuilder<TProducer> builder = new();
         configure.Invoke(builder);
@@ -40,7 +40,7 @@ public static class ServiceCollectionExtensions
 
     private static void AddFactoryToServiceCollection<TProducer>(IServiceCollection serviceCollection,
         CaptchaSolverBuilder<TProducer> builder, ServiceLifetime lifetime)
-        where TProducer : IProducer
+        where TProducer : class, IProducer
     {
         serviceCollection.Add(new ServiceDescriptor(typeof(ICaptchaSolverFactory), provider =>
             new CaptchaSolverFactory(builder.Build(provider)), lifetime));

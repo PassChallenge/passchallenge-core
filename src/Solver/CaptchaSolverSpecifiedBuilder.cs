@@ -4,7 +4,7 @@ using KillDNS.CaptchaSolver.Core.Producer;
 namespace KillDNS.CaptchaSolver.Core.Solver;
 
 public class CaptchaSolverSpecifiedBuilder<TProducer> : CaptchaSolverBuilder<TProducer>
-    where TProducer : IProducerWithSpecifiedCaptchaAndSolutions
+    where TProducer : class, IProducerWithSpecifiedCaptchaAndSolutions
 {
     public AvailableCaptchaAndSolutionStorageBuilder AvailableCaptchaAndSolutionStorageBuilder { get; } = new();
 
