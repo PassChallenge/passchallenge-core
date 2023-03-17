@@ -34,4 +34,20 @@ public class TextSolutionTests
             Assert.That(solution.ResultType, Is.EqualTo(SolutionResultType.Error));
         });
     }
+
+    [Test]
+    public void ToString_Not_Error_Is_Correct()
+    {
+        TextSolution solution = new("answer", SolutionResultType.Solved);
+        string expectedString = "ResultType: Solved, Answer: answer, ErrorMessage: ";
+        Assert.That(solution.ToString(), Is.EqualTo(expectedString));
+    }
+
+    [Test]
+    public void ToString_Error_Is_Correct()
+    {
+        TextSolution solution = TextSolution.ErrorSolution("Wrong data");
+        string expectedString = "ResultType: Error, Answer: , ErrorMessage: Wrong data";
+        Assert.That(solution.ToString(), Is.EqualTo(expectedString));
+    }
 }

@@ -25,4 +25,9 @@ public class TextSolution : ISolution
 
         return result;
     }
+
+    public override string ToString()
+    {
+        return $"ResultType: {ResultType}, Answer: {Answer}, ErrorMessage: {ErrorMessage}";
+    }
 }

@@ -19,4 +19,14 @@ public class PictureCaptchaTests
         // ReSharper disable once ObjectCreationAsStatement
         Assert.Throws<ArgumentNullException>(() => new PictureCaptcha(null!));
     }
+
+    [Test]
+    [TestCase(new byte[] { 0, 3, 4, 6, 1, 8, 22 }, "AAMEBgEIFg==")]
+    [TestCase(new byte[] { }, "")]
+    public void ToString_Is_Correct(byte[] array, string expectedString)
+    {
+        string expectedValue = Convert.ToBase64String(array);
+        PictureCaptcha captcha = new(array);
+        Assert.That(captcha.ToString(), Is.EqualTo(expectedValue));
+    }
 }
