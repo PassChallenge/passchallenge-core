@@ -14,7 +14,9 @@ public class CaptchaHandlerDescriptorStorageBuilder
 
     public CaptchaHandlerDescriptorStorageBuilder AddCaptchaHandler<TCaptcha, TSolution, THandler>(
         string? handlerName = default)
-        where TCaptcha : ICaptcha where TSolution : ISolution where THandler : ICaptchaHandler<TCaptcha, TSolution>
+        where TCaptcha : ICaptcha
+        where TSolution : ISolution
+        where THandler : class, ICaptchaHandler<TCaptcha, TSolution>
     {
         AddHandlerDescriptor(CaptchaHandlerDescriptor.Create<TCaptcha, TSolution, THandler>(handlerName));
         return this;
@@ -24,7 +26,7 @@ public class CaptchaHandlerDescriptorStorageBuilder
         Func<IServiceProvider, THandler> factory,
         string? handlerName = default) where TCaptcha : ICaptcha
         where TSolution : ISolution
-        where THandler : ICaptchaHandler<TCaptcha, TSolution>
+        where THandler : class, ICaptchaHandler<TCaptcha, TSolution>
     {
         AddHandlerDescriptor(CaptchaHandlerDescriptor.Create<TCaptcha, TSolution, THandler>(factory, handlerName));
         return this;

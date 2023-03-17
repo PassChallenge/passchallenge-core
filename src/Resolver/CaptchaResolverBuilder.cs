@@ -25,6 +25,7 @@ public class CaptchaResolverBuilder : IBuilderWithCaptchaHandlers
     internal Type? ConsumerType { get; private set; }
 
     internal Func<IServiceProvider, IConsumer>? Factory { get; private set; }
+
     public CaptchaResolverBuilder SetConsumer(Func<IServiceProvider, IConsumer> factory)
     {
         Factory = factory;
@@ -37,18 +38,26 @@ public class CaptchaResolverBuilder : IBuilderWithCaptchaHandlers
         return this;
     }
 
-    public IBuilderWithCaptchaHandlers AddCaptchaHandler<TCaptcha, TSolution, THandler>(string? handlerName = default) where TCaptcha : ICaptcha where TSolution : ISolution where THandler : ICaptchaHandler<TCaptcha, TSolution>
+    public IBuilderWithCaptchaHandlers AddCaptchaHandler<TCaptcha, TSolution, THandler>(string? handlerName = default)
+        where TCaptcha : ICaptcha
+        where TSolution : ISolution
+        where THandler : class, ICaptchaHandler<TCaptcha, TSolution>
     {
         MessageHandlers.Add(typeof(THandler));
         return this;
     }
 
-    public IBuilderWithCaptchaHandlers AddCaptchaHandler<TCaptcha, TSolution, THandler>(Func<IServiceProvider, THandler> factory, string? handlerName = default) where TCaptcha : ICaptcha where TSolution : ISolution where THandler : ICaptchaHandler<TCaptcha, TSolution>
+    public IBuilderWithCaptchaHandlers AddCaptchaHandler<TCaptcha, TSolution, THandler>(
+        Func<IServiceProvider, THandler> factory, string? handlerName = default) where TCaptcha : ICaptcha
+        where TSolution : ISolution
+        where THandler : class, ICaptchaHandler<TCaptcha, TSolution>
     {
         throw new NotImplementedException();
     }
 
-    public IBuilderWithCaptchaHandlers AddCaptchaHandler<TCaptcha, TSolution>(Func<IServiceProvider, TCaptcha, Task<TSolution>> func, string? handlerName = default) where TCaptcha : ICaptcha where TSolution : ISolution
+    public IBuilderWithCaptchaHandlers AddCaptchaHandler<TCaptcha, TSolution>(
+        Func<IServiceProvider, TCaptcha, Task<TSolution>> func, string? handlerName = default)
+        where TCaptcha : ICaptcha where TSolution : ISolution
     {
         throw new NotImplementedException();
     }
