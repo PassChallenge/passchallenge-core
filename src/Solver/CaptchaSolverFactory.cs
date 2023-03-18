@@ -10,10 +10,17 @@ internal class CaptchaSolverFactory : ICaptchaSolverFactory
 {
     private readonly IProducer _producer;
 
-    public CaptchaSolverFactory(IProducer producer)
+    public CaptchaSolverFactory(IProducer producer, string solverName)
     {
         _producer = producer ?? throw new ArgumentNullException(nameof(producer));
+
+        if (string.IsNullOrWhiteSpace(solverName))
+            throw new ArgumentException("Is null or whitespace.", nameof(solverName));
+
+        SolverName = solverName;
     }
+
+    public string SolverName { get; }
 
     public ICaptchaSolver<TCaptcha, TSolution> CreateSolver<TCaptcha, TSolution>(string? handlerName = default)
         where TCaptcha : ICaptcha where TSolution : ISolution
