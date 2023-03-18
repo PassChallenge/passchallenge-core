@@ -7,9 +7,15 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace KillDNS.CaptchaSolver.Core.Solver;
 
-public class CaptchaSolverBuilder<TProducer> where TProducer : class, IProducer
+public class CaptchaSolverBuilder<TProducer> where TProducer : IProducer
 {
     private readonly List<Action<TProducer>> _configureProducerActions = new();
+
+    public CaptchaSolverBuilder()
+    {
+        if (typeof(TProducer).IsInterface)
+            throw new ArgumentException("The producer must be a class.");
+    }
 
     public AvailableCaptchaAndSolutionStorageBuilder AvailableCaptchaAndSolutionStorageBuilder { get; } = new();
 

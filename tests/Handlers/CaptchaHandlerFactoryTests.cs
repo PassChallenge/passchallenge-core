@@ -57,10 +57,10 @@ public class CaptchaHandlerFactoryTests
     public void CreateHandler_Descriptor_With_HandlerFactory_Is_Correct()
     {
         Mock<IServiceProvider> mock = new();
-        Mock<ICaptchaHandler<ICaptcha, ISolution>> handlerMock = new();
+        Mock<TestCaptchaHandler<ICaptcha, ISolution>> handlerMock = new();
 
         CaptchaHandlerDescriptor descriptor =
-            CaptchaHandlerDescriptor.Create<ICaptcha, ISolution, ICaptchaHandler<ICaptcha, ISolution>>(_ =>
+            CaptchaHandlerDescriptor.Create<ICaptcha, ISolution, TestCaptchaHandler<ICaptcha, ISolution>>(_ =>
                 handlerMock.Object);
 
         Mock<ICaptchaHandlerDescriptorStorage> handlerDescriptorMock = new();
@@ -80,7 +80,7 @@ public class CaptchaHandlerFactoryTests
         Mock<IServiceProvider> mock = new();
 
         CaptchaHandlerDescriptor descriptor =
-            CaptchaHandlerDescriptor.Create<TestCaptcha, TestSolution, TestCaptchaHandler>();
+            CaptchaHandlerDescriptor.Create<TestCaptcha, TestSolution, TestCaptchaHandler<TestCaptcha, TestSolution>>();
 
         Mock<ICaptchaHandlerDescriptorStorage> handlerDescriptorMock = new();
         handlerDescriptorMock.Setup(x => x.GetDescriptor<TestCaptcha, TestSolution>(It.IsAny<string?>()))
@@ -92,7 +92,7 @@ public class CaptchaHandlerFactoryTests
             factory.CreateHandler<TestCaptcha, TestSolution>(mock.Object);
 
         Assert.IsInstanceOf<ICaptchaHandler<TestCaptcha, TestSolution>>(handler);
-        Assert.IsInstanceOf<TestCaptchaHandler>(handler);
+        Assert.IsInstanceOf<TestCaptchaHandler<TestCaptcha, TestSolution>>(handler);
     }
 
     [Test]

@@ -35,18 +35,19 @@ public class CaptchaHandlerDescriptorTests
     [Test]
     public void Create_With_HandlerFactory_Is_Correct()
     {
-        Mock<Func<ICaptchaHandler<ICaptcha, ISolution>>> handlerMock = new();
-        handlerMock.Setup(x => x.Invoke()).Returns(new Mock<ICaptchaHandler<ICaptcha, ISolution>>().Object);
+        Mock<Func<TestCaptchaHandler<ICaptcha, ISolution>>> handlerMock = new();
+        handlerMock.Setup(x => x.Invoke()).Returns(new Mock<TestCaptchaHandler<ICaptcha, ISolution>>().Object);
 
         CaptchaHandlerDescriptor captchaHandlerDescriptor =
-            CaptchaHandlerDescriptor.Create<ICaptcha, ISolution, ICaptchaHandler<ICaptcha, ISolution>>(_ =>
+            CaptchaHandlerDescriptor.Create<ICaptcha, ISolution, TestCaptchaHandler<ICaptcha, ISolution>>(_ =>
                 handlerMock.Object.Invoke());
 
         Assert.Multiple(() =>
         {
             Assert.That(captchaHandlerDescriptor.CaptchaType, Is.EqualTo(typeof(ICaptcha)));
             Assert.That(captchaHandlerDescriptor.SolutionType, Is.EqualTo(typeof(ISolution)));
-            Assert.That(captchaHandlerDescriptor.HandlerType, Is.EqualTo(typeof(ICaptchaHandler<ICaptcha, ISolution>)));
+            Assert.That(captchaHandlerDescriptor.HandlerType,
+                Is.EqualTo(typeof(TestCaptchaHandler<ICaptcha, ISolution>)));
             Assert.Null(captchaHandlerDescriptor.SolverFunction);
             Assert.NotNull(captchaHandlerDescriptor.ImplementationFactory);
         });
@@ -57,19 +58,35 @@ public class CaptchaHandlerDescriptorTests
     }
 
     [Test]
+    public void Create_With_HandlerFactory_Is_Interface_IsCorrect()
+    {
+        Assert.DoesNotThrow(() =>
+            CaptchaHandlerDescriptor.Create<ICaptcha, ISolution, ICaptchaHandler<ICaptcha, ISolution>>(_ =>
+                It.IsAny<ICaptchaHandler<ICaptcha, ISolution>>()));
+    }
+
+    [Test]
     public void Create_With_Handler_Is_Correct()
     {
         CaptchaHandlerDescriptor captchaHandlerDescriptor =
-            CaptchaHandlerDescriptor.Create<TestCaptcha, TestSolution, TestCaptchaHandler>();
+            CaptchaHandlerDescriptor.Create<TestCaptcha, TestSolution, TestCaptchaHandler<TestCaptcha, TestSolution>>();
 
         Assert.Multiple(() =>
         {
             Assert.That(captchaHandlerDescriptor.CaptchaType, Is.EqualTo(typeof(TestCaptcha)));
             Assert.That(captchaHandlerDescriptor.SolutionType, Is.EqualTo(typeof(TestSolution)));
-            Assert.That(captchaHandlerDescriptor.HandlerType, Is.EqualTo(typeof(TestCaptchaHandler)));
+            Assert.That(captchaHandlerDescriptor.HandlerType,
+                Is.EqualTo(typeof(TestCaptchaHandler<TestCaptcha, TestSolution>)));
             Assert.Null(captchaHandlerDescriptor.SolverFunction);
             Assert.Null(captchaHandlerDescriptor.ImplementationFactory);
         });
+    }
+
+    [Test]
+    public void Create_With_Handler_Is_Interface_Throws_ArgumentException()
+    {
+        Assert.Throws<ArgumentException>(() =>
+            CaptchaHandlerDescriptor.Create<ICaptcha, ISolution, ICaptchaHandler<ICaptcha, ISolution>>());
     }
 
     [Test]
@@ -91,11 +108,11 @@ public class CaptchaHandlerDescriptorTests
     [Test]
     public void ToString_With_HandlerFactory()
     {
-        Mock<Func<ICaptchaHandler<ICaptcha, ISolution>>> handlerMock = new();
-        handlerMock.Setup(x => x.Invoke()).Returns(new Mock<ICaptchaHandler<ICaptcha, ISolution>>().Object);
+        Mock<Func<TestCaptchaHandler<ICaptcha, ISolution>>> handlerMock = new();
+        handlerMock.Setup(x => x.Invoke()).Returns(new Mock<TestCaptchaHandler<ICaptcha, ISolution>>().Object);
 
         CaptchaHandlerDescriptor captchaHandlerDescriptor =
-            CaptchaHandlerDescriptor.Create<ICaptcha, ISolution, ICaptchaHandler<ICaptcha, ISolution>>(_ =>
+            CaptchaHandlerDescriptor.Create<ICaptcha, ISolution, TestCaptchaHandler<ICaptcha, ISolution>>(_ =>
                 handlerMock.Object.Invoke());
 
         string expected =
@@ -110,7 +127,7 @@ public class CaptchaHandlerDescriptorTests
     public void ToString_With_Handler()
     {
         CaptchaHandlerDescriptor captchaHandlerDescriptor =
-            CaptchaHandlerDescriptor.Create<TestCaptcha, TestSolution, TestCaptchaHandler>();
+            CaptchaHandlerDescriptor.Create<TestCaptcha, TestSolution, TestCaptchaHandler<TestCaptcha, TestSolution>>();
 
         string expected =
             $"{captchaHandlerDescriptor.CaptchaType}: {captchaHandlerDescriptor.SolutionType}, Handler: {captchaHandlerDescriptor.HandlerType}";
@@ -123,7 +140,7 @@ public class CaptchaHandlerDescriptorTests
     public void CloneWithNewName_Is_Correct()
     {
         CaptchaHandlerDescriptor captchaHandlerDescriptor =
-            CaptchaHandlerDescriptor.Create<TestCaptcha, TestSolution, TestCaptchaHandler>();
+            CaptchaHandlerDescriptor.Create<TestCaptcha, TestSolution, TestCaptchaHandler<TestCaptcha, TestSolution>>();
 
         string expectedHandlerName = "handler-name";
         CaptchaHandlerDescriptor newCaptchaHandlerDescriptor =
@@ -136,7 +153,7 @@ public class CaptchaHandlerDescriptorTests
     public void CloneWithNewName_When_HandlerName_Is_Null_Throws_ArgumentException()
     {
         CaptchaHandlerDescriptor captchaHandlerDescriptor =
-            CaptchaHandlerDescriptor.Create<TestCaptcha, TestSolution, TestCaptchaHandler>();
+            CaptchaHandlerDescriptor.Create<TestCaptcha, TestSolution, TestCaptchaHandler<TestCaptcha, TestSolution>>();
 
         string expectedHandlerName = null!;
         Assert.Throws<ArgumentException>(() =>
@@ -147,7 +164,7 @@ public class CaptchaHandlerDescriptorTests
     public void CloneWithNewName_When_HandlerName_Is_WhiteSpace_Throws_ArgumentException()
     {
         CaptchaHandlerDescriptor captchaHandlerDescriptor =
-            CaptchaHandlerDescriptor.Create<TestCaptcha, TestSolution, TestCaptchaHandler>();
+            CaptchaHandlerDescriptor.Create<TestCaptcha, TestSolution, TestCaptchaHandler<TestCaptcha, TestSolution>>();
 
         string expectedHandlerName = "";
         Assert.Throws<ArgumentException>(() =>

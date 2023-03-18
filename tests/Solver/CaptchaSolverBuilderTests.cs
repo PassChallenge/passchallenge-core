@@ -9,6 +9,13 @@ namespace KillDNS.CaptchaSolver.Core.Tests.Solver;
 public class CaptchaSolverBuilderTests
 {
     [Test]
+    public void Constructor_When_Producer_Is_Interface_Throws_ArgumentNullException()
+    {
+        // ReSharper disable once ObjectCreationAsStatement
+        Assert.Throws<ArgumentException>(() => new CaptchaSolverBuilder<IProducer>());
+    }
+
+    [Test]
     public void Build_Is_Correct()
     {
         Mock<IServiceProvider> serviceProviderMock = new();
@@ -32,7 +39,7 @@ public class CaptchaSolverBuilderTests
     [Test]
     public void Build_Producer_Is_Null_And_Throws_ArgumentNullException()
     {
-        CaptchaSolverBuilder<IProducer> builder = new();
+        CaptchaSolverBuilder<TestProducer> builder = new();
         Assert.Throws<ArgumentNullException>(() => builder.Build(null!));
     }
 
@@ -52,7 +59,6 @@ public class CaptchaSolverBuilderTests
         Assert.That(producer, Is.InstanceOf<TestProducerWithCaptchaHandlerFactory>());
         action.Verify(x => x.Invoke(It.IsAny<IProducer>()), Times.Once);
     }
-
 
     [Test]
     public void AddConfigureProducerAction_Action_Is_Null_And_Throws_ArgumentNullException()

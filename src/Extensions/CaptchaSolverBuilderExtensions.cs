@@ -9,7 +9,7 @@ public static class CaptchaSolverBuilderExtensions
 {
     public static CaptchaSolverBuilder<TProducer> SetCaptchaHandlerFactory<TProducer>(
         this CaptchaSolverBuilder<TProducer> builder,
-        ICaptchaHandlerFactory captchaHandlerFactory) where TProducer : class, IProducerWithCaptchaHandlerFactory
+        ICaptchaHandlerFactory captchaHandlerFactory) where TProducer : IProducerWithCaptchaHandlerFactory
     {
         if (builder == null)
             throw new ArgumentNullException(nameof(builder));

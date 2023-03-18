@@ -17,7 +17,8 @@ public class CaptchaHandlerDescriptorStorageTests
         {
             CaptchaHandlerDescriptor.Create<ICaptcha, ISolution>((_, _) => Task.FromResult(It.IsAny<ISolution>()),
                 "handler-1"),
-            CaptchaHandlerDescriptor.Create<TestCaptcha, TestSolution, TestCaptchaHandler>("handler-2")
+            CaptchaHandlerDescriptor.Create<TestCaptcha, TestSolution, TestCaptchaHandler<TestCaptcha, TestSolution>>(
+                "handler-2")
         };
     }
 
