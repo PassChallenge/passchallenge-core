@@ -77,7 +77,7 @@ public class CaptchaHandlerDescriptor
     public static CaptchaHandlerDescriptor Create<TCaptcha, TSolution, THandler>(string? handlerName = default)
         where TCaptcha : ICaptcha
         where TSolution : ISolution
-        where THandler : class, ICaptchaHandler<TCaptcha, TSolution>
+        where THandler : ICaptchaHandler<TCaptcha, TSolution>
     {
         return new CaptchaHandlerDescriptor(typeof(TCaptcha), typeof(TSolution), typeof(THandler), handlerName);
     }
@@ -86,10 +86,10 @@ public class CaptchaHandlerDescriptor
         Func<IServiceProvider, THandler> factory, string? handlerName = default)
         where TCaptcha : ICaptcha
         where TSolution : ISolution
-        where THandler : class, ICaptchaHandler<TCaptcha, TSolution>
+        where THandler : ICaptchaHandler<TCaptcha, TSolution>
     {
         return new CaptchaHandlerDescriptor(typeof(TCaptcha), typeof(TSolution), typeof(THandler),
-            factory.Invoke, handlerName);
+            provider => factory.Invoke(provider), handlerName);
     }
 
     public static CaptchaHandlerDescriptor Create<TCaptcha, TSolution>(

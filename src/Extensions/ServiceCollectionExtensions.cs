@@ -11,7 +11,7 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddCaptchaSolver<TProducer>(this IServiceCollection serviceCollection,
         string? solverName = default, ServiceLifetime lifetime = ServiceLifetime.Scoped)
-        where TProducer : class, IProducer
+        where TProducer : IProducer
     {
         if (typeof(TProducer).IsInterface)
             throw new ArgumentException("The producer must be a class.");
@@ -25,7 +25,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddCaptchaSolver<TProducer>(this IServiceCollection serviceCollection,
         Action<CaptchaSolverBuilder<TProducer>> configure, string? solverName = default,
         ServiceLifetime lifetime = ServiceLifetime.Scoped)
-        where TProducer : class, IProducer
+        where TProducer : IProducer
     {
         if (typeof(TProducer).IsInterface)
             throw new ArgumentException("The producer must be a class.");
@@ -46,7 +46,7 @@ public static class ServiceCollectionExtensions
 
     private static void AddFactoryToServiceCollection<TProducer>(IServiceCollection serviceCollection,
         CaptchaSolverBuilder<TProducer> builder, ServiceLifetime lifetime, string? solverName = default)
-        where TProducer : class, IProducer
+        where TProducer : IProducer
     {
         solverName ??= GetNewSolverIdentifier<TProducer>(serviceCollection);
 
@@ -59,7 +59,7 @@ public static class ServiceCollectionExtensions
     }
 
     private static string GetNewSolverIdentifier<TProducer>(IServiceCollection serviceCollection)
-        where TProducer : class, IProducer
+        where TProducer : IProducer
     {
         string baseName = $"{typeof(TProducer).Name}-".ToLower();
         for (int i = 0;; i++)

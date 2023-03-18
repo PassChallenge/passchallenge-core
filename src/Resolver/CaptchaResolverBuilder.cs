@@ -41,7 +41,7 @@ public class CaptchaResolverBuilder : IBuilderWithCaptchaHandlers
     public IBuilderWithCaptchaHandlers AddCaptchaHandler<TCaptcha, TSolution, THandler>(string? handlerName = default)
         where TCaptcha : ICaptcha
         where TSolution : ISolution
-        where THandler : class, ICaptchaHandler<TCaptcha, TSolution>
+        where THandler : ICaptchaHandler<TCaptcha, TSolution>
     {
         MessageHandlers.Add(typeof(THandler));
         return this;
@@ -50,7 +50,7 @@ public class CaptchaResolverBuilder : IBuilderWithCaptchaHandlers
     public IBuilderWithCaptchaHandlers AddCaptchaHandler<TCaptcha, TSolution, THandler>(
         Func<IServiceProvider, THandler> factory, string? handlerName = default) where TCaptcha : ICaptcha
         where TSolution : ISolution
-        where THandler : class, ICaptchaHandler<TCaptcha, TSolution>
+        where THandler : ICaptchaHandler<TCaptcha, TSolution>
     {
         throw new NotImplementedException();
     }

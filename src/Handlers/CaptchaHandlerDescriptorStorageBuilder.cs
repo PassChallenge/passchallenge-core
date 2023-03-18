@@ -16,7 +16,7 @@ public class CaptchaHandlerDescriptorStorageBuilder
         string? handlerName = default)
         where TCaptcha : ICaptcha
         where TSolution : ISolution
-        where THandler : class, ICaptchaHandler<TCaptcha, TSolution>
+        where THandler : ICaptchaHandler<TCaptcha, TSolution>
     {
         if (typeof(THandler).IsInterface)
             throw new ArgumentException("The handler must be a class.");
@@ -29,7 +29,7 @@ public class CaptchaHandlerDescriptorStorageBuilder
         Func<IServiceProvider, THandler> factory,
         string? handlerName = default) where TCaptcha : ICaptcha
         where TSolution : ISolution
-        where THandler : class, ICaptchaHandler<TCaptcha, TSolution>
+        where THandler : ICaptchaHandler<TCaptcha, TSolution>
     {
         AddHandlerDescriptor(CaptchaHandlerDescriptor.Create<TCaptcha, TSolution, THandler>(factory, handlerName));
         return this;
