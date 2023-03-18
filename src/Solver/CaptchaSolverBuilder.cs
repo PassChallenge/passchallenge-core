@@ -11,6 +11,12 @@ public class CaptchaSolverBuilder<TProducer> where TProducer : class, IProducer
 {
     private readonly List<Action<TProducer>> _configureProducerActions = new();
 
+    public CaptchaSolverBuilder()
+    {
+        if (typeof(TProducer).IsInterface)
+            throw new ArgumentException("The producer must be a class.");
+    }
+
     public AvailableCaptchaAndSolutionStorageBuilder AvailableCaptchaAndSolutionStorageBuilder { get; } = new();
 
     public TProducer Build(IServiceProvider provider)

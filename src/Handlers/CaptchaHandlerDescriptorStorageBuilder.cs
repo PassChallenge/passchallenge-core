@@ -18,6 +18,9 @@ public class CaptchaHandlerDescriptorStorageBuilder
         where TSolution : ISolution
         where THandler : class, ICaptchaHandler<TCaptcha, TSolution>
     {
+        if (typeof(THandler).IsInterface)
+            throw new ArgumentException("The handler must be a class.");
+
         AddHandlerDescriptor(CaptchaHandlerDescriptor.Create<TCaptcha, TSolution, THandler>(handlerName));
         return this;
     }

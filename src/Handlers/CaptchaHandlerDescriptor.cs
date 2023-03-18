@@ -9,14 +9,18 @@ public class CaptchaHandlerDescriptor
 {
     private CaptchaHandlerDescriptor(Type captchaType, Type solutionType, Type handlerType,
         Func<IServiceProvider, object> factory, string? handlerName = default) : this(captchaType, solutionType,
-        handlerType, handlerName)
+        handlerName)
     {
         ImplementationFactory = factory ?? throw new ArgumentNullException(nameof(factory));
+        HandlerType = handlerType ?? throw new ArgumentNullException(nameof(handlerType));
     }
 
     private CaptchaHandlerDescriptor(Type captchaType, Type solutionType, Type handlerType,
         string? handlerName = default) : this(captchaType, solutionType, handlerName)
     {
+        if (handlerType.IsInterface)
+            throw new ArgumentException("The handler must be a class.");
+
         HandlerType = handlerType ?? throw new ArgumentNullException(nameof(handlerType));
     }
 

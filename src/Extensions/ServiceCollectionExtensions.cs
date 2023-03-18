@@ -13,6 +13,9 @@ public static class ServiceCollectionExtensions
         string? solverName = default, ServiceLifetime lifetime = ServiceLifetime.Scoped)
         where TProducer : class, IProducer
     {
+        if (typeof(TProducer).IsInterface)
+            throw new ArgumentException("The producer must be a class.");
+
         if (serviceCollection == null)
             throw new ArgumentNullException(nameof(serviceCollection));
 
@@ -24,6 +27,9 @@ public static class ServiceCollectionExtensions
         ServiceLifetime lifetime = ServiceLifetime.Scoped)
         where TProducer : class, IProducer
     {
+        if (typeof(TProducer).IsInterface)
+            throw new ArgumentException("The producer must be a class.");
+
         if (serviceCollection == null)
             throw new ArgumentNullException(nameof(serviceCollection));
 

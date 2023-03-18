@@ -1,4 +1,6 @@
+using KillDNS.CaptchaSolver.Core.Captcha;
 using KillDNS.CaptchaSolver.Core.Handlers;
+using KillDNS.CaptchaSolver.Core.Solutions;
 using KillDNS.CaptchaSolver.Core.Tests.Tools;
 using Moq;
 using NUnit.Framework;
@@ -11,7 +13,7 @@ public class CaptchaHandlerDescriptorStorageBuilderTests
     public void AddCaptchaHandler_With_Handler_And_Default_HandlerName_Is_Correct()
     {
         CaptchaHandlerDescriptorStorageBuilder builder = new();
-        builder.AddCaptchaHandler<TestCaptcha, TestSolution, TestCaptchaHandler>();
+        builder.AddCaptchaHandler<TestCaptcha, TestSolution, TestCaptchaHandler<TestCaptcha, TestSolution>>();
 
         ICaptchaHandlerDescriptorAvailableStorage storage = builder.Build();
 
@@ -21,7 +23,7 @@ public class CaptchaHandlerDescriptorStorageBuilderTests
         {
             Assert.That(descriptor.CaptchaType, Is.EqualTo(typeof(TestCaptcha)));
             Assert.That(descriptor.SolutionType, Is.EqualTo(typeof(TestSolution)));
-            Assert.That(descriptor.HandlerType, Is.EqualTo(typeof(TestCaptchaHandler)));
+            Assert.That(descriptor.HandlerType, Is.EqualTo(typeof(TestCaptchaHandler<TestCaptcha, TestSolution>)));
             Assert.That(descriptor.HandlerName,
                 Is.EqualTo($"{nameof(TestCaptcha)}-{nameof(TestSolution)}-0".ToLower()));
             Assert.IsNull(descriptor.ImplementationFactory);
@@ -34,7 +36,8 @@ public class CaptchaHandlerDescriptorStorageBuilderTests
     {
         string expectedHandlerName = "handler-name";
         CaptchaHandlerDescriptorStorageBuilder builder = new();
-        builder.AddCaptchaHandler<TestCaptcha, TestSolution, TestCaptchaHandler>(expectedHandlerName);
+        builder.AddCaptchaHandler<TestCaptcha, TestSolution, TestCaptchaHandler<TestCaptcha, TestSolution>>(
+            expectedHandlerName);
 
         ICaptchaHandlerDescriptorAvailableStorage storage = builder.Build();
 
@@ -44,7 +47,7 @@ public class CaptchaHandlerDescriptorStorageBuilderTests
         {
             Assert.That(descriptor.CaptchaType, Is.EqualTo(typeof(TestCaptcha)));
             Assert.That(descriptor.SolutionType, Is.EqualTo(typeof(TestSolution)));
-            Assert.That(descriptor.HandlerType, Is.EqualTo(typeof(TestCaptchaHandler)));
+            Assert.That(descriptor.HandlerType, Is.EqualTo(typeof(TestCaptchaHandler<TestCaptcha, TestSolution>)));
             Assert.That(descriptor.HandlerName, Is.EqualTo(expectedHandlerName));
             Assert.IsNull(descriptor.ImplementationFactory);
             Assert.IsNull(descriptor.SolverFunction);
@@ -55,7 +58,8 @@ public class CaptchaHandlerDescriptorStorageBuilderTests
     public void AddCaptchaHandler_With_Handler_Factory_And_Default_HandlerName_Is_Correct()
     {
         CaptchaHandlerDescriptorStorageBuilder builder = new();
-        builder.AddCaptchaHandler<TestCaptcha, TestSolution, TestCaptchaHandler>(_ => new TestCaptchaHandler());
+        builder.AddCaptchaHandler<TestCaptcha, TestSolution, TestCaptchaHandler<TestCaptcha, TestSolution>>(_ =>
+            new TestCaptchaHandler<TestCaptcha, TestSolution>());
 
         ICaptchaHandlerDescriptorAvailableStorage storage = builder.Build();
 
@@ -65,7 +69,7 @@ public class CaptchaHandlerDescriptorStorageBuilderTests
         {
             Assert.That(descriptor.CaptchaType, Is.EqualTo(typeof(TestCaptcha)));
             Assert.That(descriptor.SolutionType, Is.EqualTo(typeof(TestSolution)));
-            Assert.That(descriptor.HandlerType, Is.EqualTo(typeof(TestCaptchaHandler)));
+            Assert.That(descriptor.HandlerType, Is.EqualTo(typeof(TestCaptchaHandler<TestCaptcha, TestSolution>)));
             Assert.That(descriptor.HandlerName,
                 Is.EqualTo($"{nameof(TestCaptcha)}-{nameof(TestSolution)}-0".ToLower()));
             Assert.IsNotNull(descriptor.ImplementationFactory);
@@ -78,7 +82,8 @@ public class CaptchaHandlerDescriptorStorageBuilderTests
     {
         string expectedHandlerName = "handler-name";
         CaptchaHandlerDescriptorStorageBuilder builder = new();
-        builder.AddCaptchaHandler<TestCaptcha, TestSolution, TestCaptchaHandler>(_ => new TestCaptchaHandler(),
+        builder.AddCaptchaHandler<TestCaptcha, TestSolution, TestCaptchaHandler<TestCaptcha, TestSolution>>(
+            _ => new TestCaptchaHandler<TestCaptcha, TestSolution>(),
             expectedHandlerName);
 
         ICaptchaHandlerDescriptorAvailableStorage storage = builder.Build();
@@ -89,7 +94,7 @@ public class CaptchaHandlerDescriptorStorageBuilderTests
         {
             Assert.That(descriptor.CaptchaType, Is.EqualTo(typeof(TestCaptcha)));
             Assert.That(descriptor.SolutionType, Is.EqualTo(typeof(TestSolution)));
-            Assert.That(descriptor.HandlerType, Is.EqualTo(typeof(TestCaptchaHandler)));
+            Assert.That(descriptor.HandlerType, Is.EqualTo(typeof(TestCaptchaHandler<TestCaptcha, TestSolution>)));
             Assert.That(descriptor.HandlerName, Is.EqualTo(expectedHandlerName));
             Assert.IsNotNull(descriptor.ImplementationFactory);
             Assert.IsNull(descriptor.SolverFunction);
@@ -147,8 +152,8 @@ public class CaptchaHandlerDescriptorStorageBuilderTests
     {
         CaptchaHandlerDescriptorStorageBuilder builder = new();
 
-        builder.AddCaptchaHandler<TestCaptcha, TestSolution, TestCaptchaHandler>();
-        builder.AddCaptchaHandler<TestCaptcha, TestSolution, TestCaptchaHandler>();
+        builder.AddCaptchaHandler<TestCaptcha, TestSolution, TestCaptchaHandler<TestCaptcha, TestSolution>>();
+        builder.AddCaptchaHandler<TestCaptcha, TestSolution, TestCaptchaHandler<TestCaptcha, TestSolution>>();
 
         ICaptchaHandlerDescriptorAvailableStorage storage = builder.Build();
 
@@ -163,7 +168,8 @@ public class CaptchaHandlerDescriptorStorageBuilderTests
             {
                 Assert.That(descriptors[i].CaptchaType, Is.EqualTo(typeof(TestCaptcha)));
                 Assert.That(descriptors[i].SolutionType, Is.EqualTo(typeof(TestSolution)));
-                Assert.That(descriptors[i].HandlerType, Is.EqualTo(typeof(TestCaptchaHandler)));
+                Assert.That(descriptors[i].HandlerType,
+                    Is.EqualTo(typeof(TestCaptchaHandler<TestCaptcha, TestSolution>)));
                 Assert.That(descriptors[i].HandlerName,
                     Is.EqualTo($"{nameof(TestCaptcha)}-{nameof(TestSolution)}-{i}".ToLower()));
                 Assert.IsNull(descriptors[i].ImplementationFactory);
@@ -178,8 +184,30 @@ public class CaptchaHandlerDescriptorStorageBuilderTests
         string expectedHandlerName = "handler-name";
         CaptchaHandlerDescriptorStorageBuilder builder = new();
 
-        builder.AddCaptchaHandler<TestCaptcha, TestSolution, TestCaptchaHandler>(expectedHandlerName);
+        builder.AddCaptchaHandler<TestCaptcha, TestSolution, TestCaptchaHandler<TestCaptcha, TestSolution>>(
+            expectedHandlerName);
         Assert.Throws<InvalidOperationException>(() =>
-            builder.AddCaptchaHandler<TestCaptcha, TestSolution, TestCaptchaHandler>(expectedHandlerName));
+            builder.AddCaptchaHandler<TestCaptcha, TestSolution, TestCaptchaHandler<TestCaptcha, TestSolution>>(
+                expectedHandlerName));
+    }
+
+    [Test]
+    public void AddCaptchaHandler_With_Handler_Is_Interface_Throws_ArgumentException()
+    {
+        string expectedHandlerName = "handler-name";
+        CaptchaHandlerDescriptorStorageBuilder builder = new();
+        Assert.Throws<ArgumentException>(() =>
+            builder.AddCaptchaHandler<ICaptcha, ISolution, ICaptchaHandler<ICaptcha, ISolution>>(
+                expectedHandlerName));
+    }
+
+    [Test]
+    public void AddCaptchaHandler_With_HandlerFactory_And_Handler_Is_Correct()
+    {
+        string expectedHandlerName = "handler-name";
+        CaptchaHandlerDescriptorStorageBuilder builder = new();
+        Assert.DoesNotThrow(() =>
+            builder.AddCaptchaHandler<ICaptcha, ISolution, ICaptchaHandler<ICaptcha, ISolution>>(provider =>
+                It.IsAny<ICaptchaHandler<ICaptcha, ISolution>>(), expectedHandlerName));
     }
 }
