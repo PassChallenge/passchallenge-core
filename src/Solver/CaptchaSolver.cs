@@ -25,10 +25,7 @@ public class CaptchaSolver<TCaptcha, TSolution> : ICaptchaSolver<TCaptcha, TSolu
         if (captcha == null)
             throw new ArgumentNullException(nameof(captcha));
 
-        if (_producer is IProducerWithSpecifiedCaptchaAndSolutions specifiedProducer)
-            return specifiedProducer.ProduceAndWaitSolution<TCaptcha, TSolution>(captcha, HandlerName,
-                cancellationToken);
-
-        return _producer.ProduceAndWaitSolution<TCaptcha, TSolution>(captcha, cancellationToken);
+        return _producer.ProduceAndWaitSolution<TCaptcha, TSolution>(captcha, HandlerName,
+            cancellationToken);
     }
 }

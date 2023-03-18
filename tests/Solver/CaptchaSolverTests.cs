@@ -29,9 +29,9 @@ public class CaptchaSolverTests
     }
 
     [Test]
-    public async Task Constructor_When_Producer_Is_IProducerWithSpecifiedCaptchaAndSolutions()
+    public async Task Solve_Is_Correct()
     {
-        Mock<IProducerWithSpecifiedCaptchaAndSolutions> mock = new();
+        Mock<IProducer> mock = new();
         mock.Setup(x =>
             x.ProduceAndWaitSolution<ICaptcha, ISolution>(It.IsAny<ICaptcha>(), It.IsAny<string>(),
                 It.IsAny<CancellationToken>()));
@@ -58,6 +58,7 @@ public class CaptchaSolverTests
         Mock<IProducer> mock = new();
         mock.Setup(x =>
                 x.ProduceAndWaitSolution<TestCaptcha, TestSolution>(It.IsAny<TestCaptcha>(),
+                    It.IsAny<string>(),
                     It.IsAny<CancellationToken>()))
             .Returns(Task.FromResult(expectedSolution));
 
@@ -66,6 +67,7 @@ public class CaptchaSolverTests
 
         mock.Verify(
             x => x.ProduceAndWaitSolution<TestCaptcha, TestSolution>(It.IsAny<TestCaptcha>(),
+                It.IsAny<string>(),
                 It.IsAny<CancellationToken>()),
             Times.Once);
 

@@ -41,13 +41,13 @@ public class ServiceCollectionExtensionsTests
     [TestCase(ServiceLifetime.Transient)]
     [TestCase(ServiceLifetime.Scoped)]
     [TestCase(ServiceLifetime.Singleton)]
-    public void AddSpecifiedCaptchaSolver_SpecifiedSolver_ServiceCollection_AddMethod_Is_Called(
+    public void AddCaptchaSolver_ServiceCollection_AddMethod_Is_Called(
         ServiceLifetime lifetime)
     {
         Mock<IServiceCollection> mock = new();
         TestHelper.MakeEnumerableDescriptors(mock);
 
-        mock.Object.AddSpecifiedCaptchaSolver<IProducerWithSpecifiedCaptchaAndSolutions>(builder =>
+        mock.Object.AddCaptchaSolver<IProducer>(builder =>
         {
             builder.AvailableCaptchaAndSolutionStorageBuilder.AddSupportCaptchaAndSolution(
                 CaptchaHandlerDescriptor.Create<ICaptcha, ISolution>((_, _) =>
@@ -62,20 +62,20 @@ public class ServiceCollectionExtensionsTests
     }
 
     [Test]
-    public void AddSpecifiedCaptchaSolver_DefaultSolver_When_ServiceCollection_Is_Null_Throws_ArgumentNullException()
+    public void AddSolver_DefaultSolver_When_ServiceCollection_Is_Null_Throws_ArgumentNullException()
     {
         Assert.Throws<ArgumentNullException>(() =>
-            ServiceCollectionExtensions.AddSpecifiedCaptchaSolver<IProducerWithSpecifiedCaptchaAndSolutions>(
+            ServiceCollectionExtensions.AddCaptchaSolver<IProducer>(
                 null!, _ => { }));
     }
 
     [Test]
-    public void AddSpecifiedCaptchaSolver_With_Builder_When_ServiceCollection_Is_Null_Throws_ArgumentNullException()
+    public void AddCaptchaSolver_With_Builder_When_ServiceCollection_Is_Null_Throws_ArgumentNullException()
     {
         Mock<IServiceCollection> mock = new();
+        Action<CaptchaSolverBuilder<IProducer>> configure = null!;
         Assert.Throws<ArgumentNullException>(() =>
-            mock.Object.AddSpecifiedCaptchaSolver<IProducerWithSpecifiedCaptchaAndSolutions>(
-                null!));
+            mock.Object.AddCaptchaSolver<IProducer>(configure));
     }
 
     [Test]
@@ -106,13 +106,6 @@ public class ServiceCollectionExtensionsTests
 
         mock.Object.AddCaptchaSolver<IProducer>(_ => { }, It.IsAny<string>(), It.IsAny<ServiceLifetime>());
         mock.Verify(x => x.Add(It.IsAny<ServiceDescriptor>()), Times.Once());
-    }
-
-    [Test]
-    public void AddCaptchaSolver_With_Builder_When_ServiceCollection_Is_Null_Throws_ArgumentNullException()
-    {
-        Assert.Throws<ArgumentNullException>(() => ServiceCollectionExtensions.AddCaptchaSolver<IProducer>(null!,
-            _ => { }));
     }
 
     [Test]
@@ -189,10 +182,12 @@ public class ServiceCollectionExtensionsTests
 
         string expectedSolverName = "solver-0";
 
-        mock.Object.AddSpecifiedCaptchaSolver<TestSpecifiedProducerBase>(
+        mock.Object.AddCaptchaSolver<TestProducer>(
             builder =>
             {
                 builder.AvailableCaptchaAndSolutionStorageBuilder.SetStorage(availableCaptchaAndSolutionStorage);
+                builder.AvailableCaptchaAndSolutionStorageBuilder
+                    .AddSupportCaptchaAndSolution<TestCaptcha, TestSolution>();
             }, expectedSolverName, It.IsAny<ServiceLifetime>());
 
         mock.Verify(x => x.Add(It.Is<ServiceDescriptor>((o, type) =>

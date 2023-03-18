@@ -11,6 +11,8 @@ public class CaptchaSolverBuilder<TProducer> where TProducer : class, IProducer
 {
     private readonly List<Action<TProducer>> _configureProducerActions = new();
 
+    public AvailableCaptchaAndSolutionStorageBuilder AvailableCaptchaAndSolutionStorageBuilder { get; } = new();
+
     public TProducer Build(IServiceProvider provider)
     {
         if (provider == null)
@@ -36,7 +38,11 @@ public class CaptchaSolverBuilder<TProducer> where TProducer : class, IProducer
             .GetParameters()
             .Select(x => provider.GetRequiredService(x.ParameterType)).ToArray();
 
-        return (TProducer)Activator.CreateInstance(typeof(TProducer), parameters);
+        TProducer producer = (TProducer)Activator.CreateInstance(typeof(TProducer), parameters);
+
+        producer.SetAvailableCaptchaAndSolutionStorage(AvailableCaptchaAndSolutionStorageBuilder.Build());
+
+        return producer;
     }
 
     private TProducer PostConfigureProducer(TProducer producer)

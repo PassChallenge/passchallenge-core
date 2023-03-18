@@ -38,25 +38,6 @@ public static class ServiceCollectionExtensions
         return serviceCollection;
     }
 
-    public static IServiceCollection AddSpecifiedCaptchaSolver<TProducer>(this IServiceCollection serviceCollection,
-        Action<CaptchaSolverSpecifiedBuilder<TProducer>> configure, string? solverName = default,
-        ServiceLifetime lifetime = ServiceLifetime.Scoped)
-        where TProducer : class, IProducerWithSpecifiedCaptchaAndSolutions
-    {
-        if (serviceCollection == null)
-            throw new ArgumentNullException(nameof(serviceCollection));
-
-        if (configure == null)
-            throw new ArgumentNullException(nameof(configure));
-
-        CaptchaSolverSpecifiedBuilder<TProducer> builder = new();
-        configure.Invoke(builder);
-
-        AddFactoryToServiceCollection(serviceCollection, builder, lifetime, solverName);
-
-        return serviceCollection;
-    }
-
     private static void AddFactoryToServiceCollection<TProducer>(IServiceCollection serviceCollection,
         CaptchaSolverBuilder<TProducer> builder, ServiceLifetime lifetime, string? solverName = default)
         where TProducer : class, IProducer

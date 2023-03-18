@@ -2,7 +2,7 @@ using KillDNS.CaptchaSolver.Core.Producer;
 
 namespace KillDNS.CaptchaSolver.Core.Tests.Tools;
 
-public class TestSpecifiedProducerBase : BaseProducerWithSpecifiedCaptchaAndSolutions
+public class TestBaseProducer : BaseProducer
 {
     public override string GetDefaultHandlerName<TCaptcha, TSolution>()
     {

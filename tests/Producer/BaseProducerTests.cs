@@ -8,12 +8,12 @@ using NUnit.Framework;
 
 namespace KillDNS.CaptchaSolver.Core.Tests.Producer;
 
-public class BaseProducerWithSpecifiedCaptchaAndSolutionsTests
+public class BaseProducerTests
 {
     [Test]
     public void SetAvailableCaptchaAndSolutionStorage_CanProduce_Is_Correct()
     {
-        TestSpecifiedProducerBase producer = new();
+        TestBaseProducer producer = new();
         producer.SetAvailableCaptchaAndSolutionStorage(new AvailableCaptchaAndSolutionStorage(
             new Dictionary<Type, Dictionary<Type, HashSet<string>>>()
             {
@@ -37,19 +37,20 @@ public class BaseProducerWithSpecifiedCaptchaAndSolutionsTests
     public void
         SetAvailableCaptchaAndSolutionStorage_When_AvailableCaptchaAndSolutionStorage_Is_Null_Throws_ArgumentNullException()
     {
-        TestSpecifiedProducerBase producer = new();
+        TestBaseProducer producer = new();
         Assert.Throws<ArgumentNullException>(() => producer.SetAvailableCaptchaAndSolutionStorage(null!));
     }
 
     [Test]
     public void ProduceAndWaitSolution_Is_Correct()
     {
-        Mock<BaseProducerWithSpecifiedCaptchaAndSolutions> mock = new();
+        Mock<BaseProducer> mock = new();
 
         ICaptcha expectedCaptcha = It.IsAny<ICaptcha>();
         CancellationToken expectedCancellationToken = new CancellationTokenSource(TimeSpan.FromHours(1)).Token;
 
-        mock.Object.ProduceAndWaitSolution<ICaptcha, ISolution>(expectedCaptcha, expectedCancellationToken);
+        mock.Object.ProduceAndWaitSolution<ICaptcha, ISolution>(expectedCaptcha, It.IsAny<string>(),
+            expectedCancellationToken);
         mock.Verify(x =>
             x.ProduceAndWaitSolution<ICaptcha, ISolution>(It.Is<ICaptcha>(mo => mo == expectedCaptcha),
                 It.Is<string>(mo => mo == default),
