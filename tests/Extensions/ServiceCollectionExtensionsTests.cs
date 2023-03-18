@@ -32,6 +32,12 @@ public class ServiceCollectionExtensionsTests
     }
 
     [Test]
+    public void AddCaptchaSolver_DefaultSolver_When_ServiceCollection_Is_Null_Throws_ArgumentNullException()
+    {
+        Assert.Throws<ArgumentNullException>(() => ServiceCollectionExtensions.AddCaptchaSolver<IProducer>(null!));
+    }
+
+    [Test]
     [TestCase(ServiceLifetime.Transient)]
     [TestCase(ServiceLifetime.Scoped)]
     [TestCase(ServiceLifetime.Singleton)]
@@ -53,6 +59,21 @@ public class ServiceCollectionExtensionsTests
             x => x.Add(It.Is<ServiceDescriptor>(descriptor =>
                 descriptor.ServiceType == typeof(ICaptchaSolverFactory) &&
                 descriptor.Lifetime == lifetime)), Times.Once());
+    }
+    
+    [Test]
+    public void AddSpecifiedCaptchaSolver_DefaultSolver_When_ServiceCollection_Is_Null_Throws_ArgumentNullException()
+    {
+        Assert.Throws<ArgumentNullException>(() => ServiceCollectionExtensions.AddSpecifiedCaptchaSolver<IProducerWithSpecifiedCaptchaAndSolutions>(
+            null!, _ => { }));
+    }
+    
+    [Test]
+    public void AddSpecifiedCaptchaSolver_With_Builder_When_ServiceCollection_Is_Null_Throws_ArgumentNullException()
+    {
+        Mock<IServiceCollection> mock = new();
+        Assert.Throws<ArgumentNullException>(() => mock.Object.AddSpecifiedCaptchaSolver<IProducerWithSpecifiedCaptchaAndSolutions>(
+            null!));
     }
 
     [Test]
@@ -77,6 +98,20 @@ public class ServiceCollectionExtensionsTests
         Mock<IServiceCollection> mock = new();
         mock.Object.AddCaptchaSolver<IProducer>(_ => { }, It.IsAny<ServiceLifetime>());
         mock.Verify(x => x.Add(It.IsAny<ServiceDescriptor>()), Times.Once());
+    }
+    
+    [Test]
+    public void AddCaptchaSolver_With_Builder_When_ServiceCollection_Is_Null_Throws_ArgumentNullException()
+    {
+        Assert.Throws<ArgumentNullException>(() => ServiceCollectionExtensions.AddCaptchaSolver<IProducer>(null!,
+            _ => { }));
+    }
+    
+    [Test]
+    public void AddCaptchaSolver_With_Builder_When_Builder_Is_Null_Throws_ArgumentNullException()
+    {
+        Mock<IServiceCollection> mock = new();
+        Assert.Throws<ArgumentNullException>(() => mock.Object.AddCaptchaSolver<IProducer>(null!));
     }
 
     [Test]

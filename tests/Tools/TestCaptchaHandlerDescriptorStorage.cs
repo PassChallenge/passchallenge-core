@@ -8,6 +8,11 @@ public class TestCaptchaHandlerDescriptorStorage : ICaptchaHandlerDescriptorStor
 {
     public IReadOnlyCollection<CaptchaHandlerDescriptor> Descriptors { get; }
 
+    public TestCaptchaHandlerDescriptorStorage()
+    {
+        Descriptors = null!;
+    }
+
     public bool ContainsDescriptor<TCaptcha, TSolution>(string? descriptorName = default)
         where TCaptcha : ICaptcha where TSolution : ISolution
     {

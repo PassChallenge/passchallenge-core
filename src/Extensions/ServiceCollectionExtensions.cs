@@ -11,6 +11,9 @@ public static class ServiceCollectionExtensions
         ServiceLifetime lifetime = ServiceLifetime.Scoped)
         where TProducer : class, IProducer
     {
+        if (serviceCollection == null) 
+            throw new ArgumentNullException(nameof(serviceCollection));
+        
         return AddCaptchaSolver<TProducer>(serviceCollection, _ => { }, lifetime);
     }
 
@@ -18,6 +21,12 @@ public static class ServiceCollectionExtensions
         Action<CaptchaSolverBuilder<TProducer>> configure, ServiceLifetime lifetime = ServiceLifetime.Scoped)
         where TProducer : class, IProducer
     {
+        if (serviceCollection == null) 
+            throw new ArgumentNullException(nameof(serviceCollection));
+        
+        if (configure == null) 
+            throw new ArgumentNullException(nameof(configure));
+        
         CaptchaSolverBuilder<TProducer> builder = new();
         configure.Invoke(builder);
 
@@ -30,6 +39,12 @@ public static class ServiceCollectionExtensions
         Action<CaptchaSolverSpecifiedBuilder<TProducer>> configure, ServiceLifetime lifetime = ServiceLifetime.Scoped)
         where TProducer : class, IProducerWithSpecifiedCaptchaAndSolutions
     {
+        if (serviceCollection == null) 
+            throw new ArgumentNullException(nameof(serviceCollection));
+        
+        if (configure == null) 
+            throw new ArgumentNullException(nameof(configure));
+        
         CaptchaSolverSpecifiedBuilder<TProducer> builder = new();
         configure.Invoke(builder);
 
