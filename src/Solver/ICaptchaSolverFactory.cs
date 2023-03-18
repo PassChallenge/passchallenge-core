@@ -6,6 +6,8 @@ namespace KillDNS.CaptchaSolver.Core.Solver;
 
 public interface ICaptchaSolverFactory
 {
+    public string SolverName { get; }
+
     ICaptchaSolver<TCaptcha, TSolution> CreateSolver<TCaptcha, TSolution>(string? handlerName = default)
         where TCaptcha : ICaptcha where TSolution : ISolution;
 

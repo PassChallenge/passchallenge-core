@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using KillDNS.CaptchaSolver.Core.DependencyInjection;
 using KillDNS.CaptchaSolver.Core.Producer;
 using KillDNS.CaptchaSolver.Core.Solver;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,78 +10,83 @@ namespace KillDNS.CaptchaSolver.Core.Extensions;
 public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddCaptchaSolver<TProducer>(this IServiceCollection serviceCollection,
-        ServiceLifetime lifetime = ServiceLifetime.Scoped)
+        string? solverName = default, ServiceLifetime lifetime = ServiceLifetime.Scoped)
         where TProducer : class, IProducer
     {
-        if (serviceCollection == null) 
+        if (serviceCollection == null)
             throw new ArgumentNullException(nameof(serviceCollection));
-        
-        return AddCaptchaSolver<TProducer>(serviceCollection, _ => { }, lifetime);
+
+        return AddCaptchaSolver<TProducer>(serviceCollection, _ => { }, solverName, lifetime);
     }
 
     public static IServiceCollection AddCaptchaSolver<TProducer>(this IServiceCollection serviceCollection,
-        Action<CaptchaSolverBuilder<TProducer>> configure, ServiceLifetime lifetime = ServiceLifetime.Scoped)
+        Action<CaptchaSolverBuilder<TProducer>> configure, string? solverName = default,
+        ServiceLifetime lifetime = ServiceLifetime.Scoped)
         where TProducer : class, IProducer
     {
-        if (serviceCollection == null) 
+        if (serviceCollection == null)
             throw new ArgumentNullException(nameof(serviceCollection));
-        
-        if (configure == null) 
+
+        if (configure == null)
             throw new ArgumentNullException(nameof(configure));
-        
+
         CaptchaSolverBuilder<TProducer> builder = new();
         configure.Invoke(builder);
 
-        AddFactoryToServiceCollection(serviceCollection, builder, lifetime);
+        AddFactoryToServiceCollection(serviceCollection, builder, lifetime, solverName);
 
         return serviceCollection;
     }
 
     public static IServiceCollection AddSpecifiedCaptchaSolver<TProducer>(this IServiceCollection serviceCollection,
-        Action<CaptchaSolverSpecifiedBuilder<TProducer>> configure, ServiceLifetime lifetime = ServiceLifetime.Scoped)
+        Action<CaptchaSolverSpecifiedBuilder<TProducer>> configure, string? solverName = default,
+        ServiceLifetime lifetime = ServiceLifetime.Scoped)
         where TProducer : class, IProducerWithSpecifiedCaptchaAndSolutions
     {
-        if (serviceCollection == null) 
+        if (serviceCollection == null)
             throw new ArgumentNullException(nameof(serviceCollection));
-        
-        if (configure == null) 
+
+        if (configure == null)
             throw new ArgumentNullException(nameof(configure));
-        
+
         CaptchaSolverSpecifiedBuilder<TProducer> builder = new();
         configure.Invoke(builder);
 
-        AddFactoryToServiceCollection(serviceCollection, builder, lifetime);
+        AddFactoryToServiceCollection(serviceCollection, builder, lifetime, solverName);
 
         return serviceCollection;
     }
 
     private static void AddFactoryToServiceCollection<TProducer>(IServiceCollection serviceCollection,
-        CaptchaSolverBuilder<TProducer> builder, ServiceLifetime lifetime)
+        CaptchaSolverBuilder<TProducer> builder, ServiceLifetime lifetime, string? solverName = default)
         where TProducer : class, IProducer
     {
-        serviceCollection.Add(new ServiceDescriptor(typeof(ICaptchaSolverFactory), provider =>
-            new CaptchaSolverFactory(builder.Build(provider)), lifetime));
+        solverName ??= GetNewSolverIdentifier<TProducer>(serviceCollection);
+
+        if (SolverFactoryIsContainsInContainer(serviceCollection, solverName))
+            throw new InvalidOperationException(
+                $"Solver '{solverName}' already added.");
+
+        serviceCollection.Add(new SolverFactoryServiceDescriptor(typeof(ICaptchaSolverFactory), provider =>
+            new CaptchaSolverFactory(builder.Build(provider), solverName), lifetime, solverName));
     }
 
-
-    /*public static IServiceCollection AddCaptchaResolver(this IServiceCollection serviceCollection,
-        Action<CaptchaResolverBuilder> configure)
+    private static string GetNewSolverIdentifier<TProducer>(IServiceCollection serviceCollection)
+        where TProducer : class, IProducer
     {
-        CaptchaResolverBuilder builder = new(serviceCollection);
-        configure.Invoke(builder);
-
-        foreach (Type handlerType in builder.MessageHandlers)
+        string baseName = $"{typeof(TProducer).Name}-".ToLower();
+        for (int i = 0;; i++)
         {
-            var f=handlerType.GetInterfaces();
-            var handlerInterfaces = handlerType.GetInterfaces().Where(x => x.GetGenericTypeDefinition() == typeof(ICaptchaHandler<,>));
+            string finalName = baseName + i;
 
-            foreach (var handlerInterface in handlerInterfaces)
-            {
-                serviceCollection.AddScoped(handlerInterface, handlerType);
-            }
+            if (SolverFactoryIsContainsInContainer(serviceCollection, finalName) == false)
+                return finalName;
         }
+    }
 
-        serviceCollection.AddHostedService<ResolverHostedService>();
-        return serviceCollection;
-    }*/
+    private static bool SolverFactoryIsContainsInContainer(IServiceCollection serviceCollection, string solverName)
+    {
+        return serviceCollection.OfType<SolverFactoryServiceDescriptor>()
+            .Any(x => x.SolverName == solverName);
+    }
 }
