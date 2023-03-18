@@ -11,21 +11,47 @@ namespace KillDNS.CaptchaSolver.Core.Tests.Solver;
 public class CaptchaSolverTests
 {
     [Test]
-    public void CaptchaSolver_Constructor_Is_Correct()
+    public void Constructor_Is_Correct()
     {
         Mock<IProducer> mock = new();
-        Assert.That(new CaptchaSolver<ICaptcha, ISolution>(mock.Object), Is.Not.Null);
+
+        string expectedHandlerName = "handler-name";
+
+        CaptchaSolver<ICaptcha, ISolution> solver = new(mock.Object, expectedHandlerName);
+        Assert.That(solver.HandlerName, Is.EqualTo(expectedHandlerName));
     }
 
     [Test]
-    public void CaptchaSolver_Constructor_When_Producer_Is_Null_Throws_ArgumentNullException()
+    public void Constructor_When_Producer_Is_Null_Throws_ArgumentNullException()
     {
         // ReSharper disable once ObjectCreationAsStatement
         Assert.Throws<ArgumentNullException>(() => new CaptchaSolver<ICaptcha, ISolution>(null!));
     }
 
     [Test]
-    public async Task CaptchaSolver_Solve_Returns_Solution()
+    public async Task Constructor_When_Producer_Is_IProducerWithSpecifiedCaptchaAndSolutions()
+    {
+        Mock<IProducerWithSpecifiedCaptchaAndSolutions> mock = new();
+        mock.Setup(x =>
+            x.ProduceAndWaitSolution<ICaptcha, ISolution>(It.IsAny<ICaptcha>(), It.IsAny<string>(),
+                It.IsAny<CancellationToken>()));
+
+        string expectedHandlerName = "handler-name";
+        ICaptcha expectedCaptcha = new TestCaptcha();
+        CancellationToken expectedCancellationToken = new CancellationTokenSource(10).Token;
+
+        CaptchaSolver<ICaptcha, ISolution> solver = new(mock.Object, expectedHandlerName);
+
+        await solver.Solve(expectedCaptcha, expectedCancellationToken);
+
+        mock.Verify(x =>
+            x.ProduceAndWaitSolution<ICaptcha, ISolution>(It.Is<ICaptcha>(mo => mo == expectedCaptcha),
+                It.Is<string>(mo => mo == expectedHandlerName),
+                It.Is<CancellationToken>(mo => mo == expectedCancellationToken)), Times.Once);
+    }
+
+    [Test]
+    public async Task Solve_Returns_Solution()
     {
         TestSolution expectedSolution = new(SolutionResultType.Solved);
 
@@ -47,7 +73,7 @@ public class CaptchaSolverTests
     }
 
     [Test]
-    public void CaptchaSolver_Solve_When_Captcha_Is_Null_Throws_ArgumentNullException()
+    public void Solve_When_Captcha_Is_Null_Throws_ArgumentNullException()
     {
         Mock<IProducer> mock = new();
         CaptchaSolver<ICaptcha, ISolution> solver = new(mock.Object);

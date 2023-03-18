@@ -7,12 +7,12 @@
         <AssemblyName>KillDNS.CaptchaSolver.Core</AssemblyName>
         <RootNamespace>KillDNS.CaptchaSolver.Core</RootNamespace>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Version>0.0.7</Version>
+        <Version>0.0.8</Version>
         <Title>KillDNS.CaptchaSolver.Core</Title>
         <Authors>Kirill Danshin</Authors>
         <Description>The core library provides the foundation for custom captcha solvers/resolvers.</Description>
         <PackageIcon>logo_128.png</PackageIcon>
-        <AssemblyVersion>0.0.7</AssemblyVersion>
+        <AssemblyVersion>0.0.8</AssemblyVersion>
         <Copyright>Copyright (c) 2023 Kirill Danshin</Copyright>
         <RepositoryUrl>https://github.com/KillDNS-Captcha-Solver/captcha-solver-core</RepositoryUrl>
         <PackageProjectUrl>https://github.com/KillDNS-Captcha-Solver/captcha-solver-core</PackageProjectUrl>
@@ -43,5 +43,13 @@
         </None>
         <None Include="..\README.md" Pack="true" PackagePath="\" />
         <None Include="..\LICENSE" Pack="true" PackagePath="" />
+        <Compile Remove="Resolver\CaptchaResolverBuilder.cs" />
+        <None Include="Resolver\CaptchaResolverBuilder.cs" />
+        <Compile Remove="Resolver\ResolverHostedService.cs" />
+        <None Include="Resolver\ResolverHostedService.cs" />
+        <Compile Remove="Consumer\CaptchaConsumer.cs" />
+        <None Include="Consumer\CaptchaConsumer.cs" />
+        <Compile Remove="Consumer\IConsumer.cs" />
+        <None Include="Consumer\IConsumer.cs" />
     </ItemGroup>
 </Project>

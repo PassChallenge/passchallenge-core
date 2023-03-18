@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace KillDNS.CaptchaSolver.Core.Solver;
 
-public class CaptchaSolverBuilder<TProducer> where TProducer : IProducer
+public class CaptchaSolverBuilder<TProducer> where TProducer : class, IProducer
 {
     private readonly List<Action<TProducer>> _configureProducerActions = new();
 
@@ -15,7 +15,7 @@ public class CaptchaSolverBuilder<TProducer> where TProducer : IProducer
     {
         if (provider == null)
             throw new ArgumentNullException(nameof(provider));
-        
+
         TProducer producer = InternalBuild(provider);
         producer = PostConfigureProducer(producer);
         return producer;
@@ -29,7 +29,7 @@ public class CaptchaSolverBuilder<TProducer> where TProducer : IProducer
         _configureProducerActions.Add(action);
         return this;
     }
-    
+
     protected virtual TProducer InternalBuild(IServiceProvider provider)
     {
         var parameters = typeof(TProducer).GetConstructors(BindingFlags.Instance | BindingFlags.Public)[0]

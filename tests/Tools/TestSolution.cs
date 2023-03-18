@@ -10,4 +10,6 @@ public class TestSolution : ISolution
     }
 
     public SolutionResultType ResultType { get; }
+    
+    public string? ErrorMessage { get; } = default;
 }

@@ -11,29 +11,42 @@ namespace KillDNS.CaptchaSolver.Core.Handlers;
 
 public class CaptchaHandlerFactory : ICaptchaHandlerFactory
 {
-    private readonly IReadOnlyDictionary<(Type captchaType, Type solutionType), CaptchaHandlerDescriptor> _handlerTypes;
+    private readonly ICaptchaHandlerDescriptorStorage _captchaHandlerDescriptorStorage;
 
-    public CaptchaHandlerFactory(IEnumerable<CaptchaHandlerDescriptor> handlers)
+    public CaptchaHandlerFactory(ICaptchaHandlerDescriptorStorage captchaHandlerDescriptorStorage)
     {
-        if (handlers == null)
-            throw new ArgumentNullException(nameof(handlers));
-
-        _handlerTypes = handlers.ToDictionary(x => (x.CaptchaType, x.SolutionType), x => x);
+        _captchaHandlerDescriptorStorage = captchaHandlerDescriptorStorage ??
+                                           throw new ArgumentNullException(nameof(captchaHandlerDescriptorStorage));
     }
 
-    public ICaptchaHandler<TCaptcha, TSolution> CreateHandler<TCaptcha, TSolution>(IServiceProvider serviceProvider)
+    public string GetDefaultHandlerName<TCaptcha, TSolution>() where TCaptcha : ICaptcha where TSolution : ISolution
+    {
+        return _captchaHandlerDescriptorStorage.GetDefaultDescriptorName<TCaptcha, TSolution>();
+    }
+
+    public IReadOnlyCollection<string> GetHandlerNames<TCaptcha, TSolution>()
+        where TCaptcha : ICaptcha where TSolution : ISolution
+    {
+        return _captchaHandlerDescriptorStorage.GetDescriptors<TCaptcha, TSolution>().Select(x => x.HandlerName!)
+            .ToList();
+    }
+
+    public bool CanProduce<TCaptcha, TSolution>(string? handlerName = default)
+        where TCaptcha : ICaptcha where TSolution : ISolution
+    {
+        return _captchaHandlerDescriptorStorage.ContainsDescriptor<TCaptcha, TSolution>(handlerName);
+    }
+
+    public ICaptchaHandler<TCaptcha, TSolution> CreateHandler<TCaptcha, TSolution>(IServiceProvider serviceProvider,
+        string? handlerName = default)
         where TCaptcha : ICaptcha
         where TSolution : ISolution
     {
         if (serviceProvider == null)
             throw new ArgumentNullException(nameof(serviceProvider));
 
-        if (!_handlerTypes.TryGetValue((typeof(TCaptcha), typeof(TSolution)),
-                out CaptchaHandlerDescriptor handlerDescriptor))
-        {
-            throw new InvalidOperationException(
-                $"Can't find handler descriptor for captcha type '{typeof(TCaptcha)}' and solution type '{typeof(TSolution)}'");
-        }
+        CaptchaHandlerDescriptor handlerDescriptor =
+            _captchaHandlerDescriptorStorage.GetDescriptor<TCaptcha, TSolution>(handlerName);
 
         //if using handler function
         if (handlerDescriptor.SolverFunction != null)

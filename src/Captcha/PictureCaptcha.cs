@@ -10,4 +10,9 @@ public class PictureCaptcha : ICaptcha
     }
 
     public byte[] ImageData { get; }
+
+    public override string ToString()
+    {
+        return Convert.ToBase64String(ImageData);
+    }
 }

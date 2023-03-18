@@ -12,15 +12,22 @@ public class CaptchaSolver<TCaptcha, TSolution> : ICaptchaSolver<TCaptcha, TSolu
 {
     private readonly IProducer _producer;
 
-    public CaptchaSolver(IProducer producer)
+    public CaptchaSolver(IProducer producer, string? handlerName = default)
     {
         _producer = producer ?? throw new ArgumentNullException(nameof(producer));
+        HandlerName = handlerName;
     }
+
+    public string? HandlerName { get; }
 
     public Task<TSolution> Solve(TCaptcha captcha, CancellationToken cancellationToken = default)
     {
         if (captcha == null)
             throw new ArgumentNullException(nameof(captcha));
+
+        if (_producer is IProducerWithSpecifiedCaptchaAndSolutions specifiedProducer)
+            return specifiedProducer.ProduceAndWaitSolution<TCaptcha, TSolution>(captcha, HandlerName,
+                cancellationToken);
 
         return _producer.ProduceAndWaitSolution<TCaptcha, TSolution>(captcha, cancellationToken);
     }
