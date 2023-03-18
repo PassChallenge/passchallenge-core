@@ -60,4 +60,15 @@ public class CaptchaSolverBuilderTests
         CaptchaSolverBuilder<TestProducerWithCaptchaHandlerFactory> builder = new();
         Assert.Throws<ArgumentNullException>(() => builder.AddConfigureProducerAction(null!));
     }
+
+    [Test]
+    public void Build_Call_Producer_SetAvailableCaptchaAndSolutionStorage()
+    {
+        Mock<IServiceProvider> serviceProviderMock = new();
+
+        CaptchaSolverBuilder<TestProducer> builder = new();
+        TestProducer producer = builder.Build(serviceProviderMock.Object);
+
+        Assert.IsNotNull(producer.AvailableCaptchaAndSolutionStorage);
+    }
 }

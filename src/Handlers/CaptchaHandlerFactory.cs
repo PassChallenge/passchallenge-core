@@ -62,7 +62,7 @@ public class CaptchaHandlerFactory : ICaptchaHandlerFactory
                 .Invoke(serviceProvider);
         }
 
-        //if handler class is specified by default 
+        //if handler class
         var parameters = handlerDescriptor.HandlerType!.GetConstructors(BindingFlags.Instance | BindingFlags.Public)[0]
             .GetParameters()
             .Select(x => serviceProvider.GetRequiredService(x.ParameterType)).ToArray();

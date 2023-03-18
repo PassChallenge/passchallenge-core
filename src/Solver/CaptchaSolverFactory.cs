@@ -29,10 +29,7 @@ internal class CaptchaSolverFactory : ICaptchaSolverFactory
             throw new InvalidOperationException(
                 $"Can't create solver for '{_producer.GetType()}' producer. Captcha '{typeof(TCaptcha)}', Solution '{typeof(TSolution)}', Handler name {(handlerName == default ? "default" : $"'{handlerName}'")}.");
 
-        handlerName = handlerName == default &&
-                      _producer is IProducerWithSpecifiedCaptchaAndSolutions specifiedProducer
-            ? specifiedProducer.GetDefaultHandlerName<TCaptcha, TSolution>()
-            : handlerName;
+        handlerName ??= _producer.GetDefaultHandlerName<TCaptcha, TSolution>();
 
         return new CaptchaSolver<TCaptcha, TSolution>(_producer, handlerName);
     }
@@ -40,17 +37,12 @@ internal class CaptchaSolverFactory : ICaptchaSolverFactory
     public bool CanCreateSolver<TCaptcha, TSolution>(string? handlerName = default)
         where TCaptcha : ICaptcha where TSolution : ISolution
     {
-        return _producer is not IProducerWithSpecifiedCaptchaAndSolutions specifiedProducer ||
-               specifiedProducer.CanProduce<TCaptcha, TSolution>(handlerName);
+        return _producer.CanProduce<TCaptcha, TSolution>(handlerName);
     }
 
     public IReadOnlyCollection<string> GetHandlerNames<TCaptcha, TSolution>()
         where TCaptcha : ICaptcha where TSolution : ISolution
     {
-        if (_producer is not IProducerWithSpecifiedCaptchaAndSolutions specifiedProducer)
-            throw new InvalidOperationException(
-                $"This method only supports producers implementing the interface {typeof(IProducerWithSpecifiedCaptchaAndSolutions)}.");
-
-        return specifiedProducer.GetHandlerNames<TCaptcha, TSolution>();
+        return _producer.GetHandlerNames<TCaptcha, TSolution>();
     }
 }

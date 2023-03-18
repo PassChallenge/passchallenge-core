@@ -36,21 +36,9 @@ public class CaptchaSolverFactoryTests
     }
 
     [Test]
-    public void CanCreateSolver_When_Producer_Is_Not_Specified_Returns_True()
+    public void CanCreateSolver_When_Producer_Returns_True()
     {
         Mock<IProducer> mock = new();
-        CaptchaSolverFactory factory = new(mock.Object, "solver-0");
-
-        bool expected = true;
-        bool actual = factory.CanCreateSolver<ICaptcha, ISolution>();
-
-        Assert.That(actual, Is.EqualTo(expected));
-    }
-
-    [Test]
-    public void CanCreateSolver_When_Producer_Is_Specified_Returns_True()
-    {
-        Mock<IProducerWithSpecifiedCaptchaAndSolutions> mock = new();
         mock.Setup(x => x.CanProduce<ICaptcha, ISolution>(default)).Returns(true);
 
         CaptchaSolverFactory factory = new(mock.Object, "solver-0");
@@ -62,9 +50,9 @@ public class CaptchaSolverFactoryTests
     }
 
     [Test]
-    public void CaptchaSolverFactory_CanCreateSolver_When_Producer_Is_Specified_Returns_False()
+    public void CaptchaSolverFactory_CanCreateSolver_Returns_False()
     {
-        Mock<IProducerWithSpecifiedCaptchaAndSolutions> mock = new();
+        Mock<IProducer> mock = new();
 
         CaptchaSolverFactory factory = new(mock.Object, "solver-0");
 
@@ -78,6 +66,7 @@ public class CaptchaSolverFactoryTests
     public void CreateSolver_Returns_CaptchaSolver()
     {
         Mock<IProducer> mock = new();
+        mock.Setup(x => x.CanProduce<ICaptcha, ISolution>(It.IsAny<string>())).Returns(true);
         CaptchaSolverFactory factory = new(mock.Object, "solver-0");
 
         ICaptchaSolver<ICaptcha, ISolution> solver = factory.CreateSolver<ICaptcha, ISolution>();
@@ -86,9 +75,10 @@ public class CaptchaSolverFactoryTests
     }
 
     [Test]
-    public void CreateSolver_When_Producer_Is_Specified_Throws_InvalidOperationException()
+    public void CreateSolver_When_Throws_InvalidOperationException()
     {
-        Mock<IProducerWithSpecifiedCaptchaAndSolutions> mock = new();
+        Mock<IProducer> mock = new();
+        mock.Setup(x => x.CanProduce<ICaptcha, ISolution>(It.IsAny<string>())).Returns(false);
         CaptchaSolverFactory factory = new(mock.Object, "solver-0");
 
         Assert.Throws<InvalidOperationException>(() => factory.CreateSolver<ICaptcha, ISolution>());
@@ -97,22 +87,12 @@ public class CaptchaSolverFactoryTests
     [Test]
     public void GetHandlerNames_Is_Correct()
     {
-        Mock<IProducerWithSpecifiedCaptchaAndSolutions> mock = new();
+        Mock<IProducer> mock = new();
         mock.Setup(x => x.GetHandlerNames<ICaptcha, ISolution>()).Returns(new List<string>());
 
         CaptchaSolverFactory factory = new(mock.Object, "solver-0");
         factory.GetHandlerNames<ICaptcha, ISolution>();
 
         mock.Verify(x => x.GetHandlerNames<ICaptcha, ISolution>(), Times.Once);
-    }
-
-    [Test]
-    public void GetHandlerNames_When_Producer_Is_IProducer_Throws_InvalidOperationException()
-    {
-        Mock<IProducer> mock = new();
-
-        CaptchaSolverFactory factory = new(mock.Object, "solver-0");
-
-        Assert.Throws<InvalidOperationException>(() => factory.GetHandlerNames<ICaptcha, ISolution>());
     }
 }

@@ -8,7 +8,7 @@ using KillDNS.CaptchaSolver.Core.Solver;
 
 namespace KillDNS.CaptchaSolver.Core.Producer;
 
-public abstract class BaseProducerWithSpecifiedCaptchaAndSolutions : IProducerWithSpecifiedCaptchaAndSolutions
+public abstract class BaseProducer : IProducer
 {
     private IAvailableCaptchaAndSolutionStorage? _availableCaptchaAndSolutionStorage;
 
@@ -33,12 +33,6 @@ public abstract class BaseProducerWithSpecifiedCaptchaAndSolutions : IProducerWi
         where TCaptcha : ICaptcha where TSolution : ISolution;
 
     public abstract Task<TSolution> ProduceAndWaitSolution<TCaptcha, TSolution>(TCaptcha captcha,
-        string? handlerName = default,
-        CancellationToken cancellationToken = default) where TCaptcha : ICaptcha where TSolution : ISolution;
-
-    public Task<TSolution> ProduceAndWaitSolution<TCaptcha, TSolution>(TCaptcha captcha,
-        CancellationToken cancellationToken = default) where TCaptcha : ICaptcha where TSolution : ISolution
-    {
-        return ProduceAndWaitSolution<TCaptcha, TSolution>(captcha, default, cancellationToken);
-    }
+        string? handlerName = default, CancellationToken cancellationToken = default)
+        where TCaptcha : ICaptcha where TSolution : ISolution;
 }
