@@ -9,7 +9,7 @@ namespace PassChallenge.Core.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddCaptchaSolver<TProducer>(this IServiceCollection serviceCollection,
+    public static IServiceCollection AddChallengeSolver<TProducer>(this IServiceCollection serviceCollection,
         string? solverName = default, ServiceLifetime lifetime = ServiceLifetime.Scoped)
         where TProducer : IProducer
     {
@@ -19,11 +19,11 @@ public static class ServiceCollectionExtensions
         if (serviceCollection == null)
             throw new ArgumentNullException(nameof(serviceCollection));
 
-        return AddCaptchaSolver<TProducer>(serviceCollection, _ => { }, solverName, lifetime);
+        return AddChallengeSolver<TProducer>(serviceCollection, _ => { }, solverName, lifetime);
     }
 
-    public static IServiceCollection AddCaptchaSolver<TProducer>(this IServiceCollection serviceCollection,
-        Action<CaptchaSolverBuilder<TProducer>> configure, string? solverName = default,
+    public static IServiceCollection AddChallengeSolver<TProducer>(this IServiceCollection serviceCollection,
+        Action<ChallengeSolverBuilder<TProducer>> configure, string? solverName = default,
         ServiceLifetime lifetime = ServiceLifetime.Scoped)
         where TProducer : IProducer
     {
@@ -36,7 +36,7 @@ public static class ServiceCollectionExtensions
         if (configure == null)
             throw new ArgumentNullException(nameof(configure));
 
-        CaptchaSolverBuilder<TProducer> builder = new();
+        ChallengeSolverBuilder<TProducer> builder = new();
         configure.Invoke(builder);
 
         AddFactoryToServiceCollection(serviceCollection, builder, lifetime, solverName);
@@ -45,7 +45,7 @@ public static class ServiceCollectionExtensions
     }
 
     private static void AddFactoryToServiceCollection<TProducer>(IServiceCollection serviceCollection,
-        CaptchaSolverBuilder<TProducer> builder, ServiceLifetime lifetime, string? solverName = default)
+        ChallengeSolverBuilder<TProducer> builder, ServiceLifetime lifetime, string? solverName = default)
         where TProducer : IProducer
     {
         solverName ??= GetNewSolverIdentifier<TProducer>(serviceCollection);
@@ -54,8 +54,8 @@ public static class ServiceCollectionExtensions
             throw new InvalidOperationException(
                 $"Solver '{solverName}' already added.");
 
-        serviceCollection.Add(new SolverFactoryServiceDescriptor(typeof(ICaptchaSolverFactory), provider =>
-            new CaptchaSolverFactory(builder.Build(provider), solverName), lifetime, solverName));
+        serviceCollection.Add(new SolverFactoryServiceDescriptor(typeof(IChallengeSolverFactory), provider =>
+            new ChallengeSolverFactory(builder.Build(provider), solverName), lifetime, solverName));
     }
 
     private static string GetNewSolverIdentifier<TProducer>(IServiceCollection serviceCollection)

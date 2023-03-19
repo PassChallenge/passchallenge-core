@@ -1,18 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using KillDNS.CaptchaSolver.Core.Captcha;
-using KillDNS.CaptchaSolver.Core.Consumer;
-using KillDNS.CaptchaSolver.Core.Handlers;
-using KillDNS.CaptchaSolver.Core.Solutions;
+using KillDNS.ChallengeSolver.Core.Challenge;
+using KillDNS.ChallengeSolver.Core.Consumer;
+using KillDNS.ChallengeSolver.Core.Handlers;
+using KillDNS.ChallengeSolver.Core.Solutions;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace KillDNS.CaptchaSolver.Core.Resolver;
+namespace KillDNS.ChallengeSolver.Core.Resolver;
 
 //TODO: WIP
-public class CaptchaResolverBuilder : IBuilderWithCaptchaHandlers
+public class ChallengeResolverBuilder : IBuilderWithChallengeHandlers
 {
-    public CaptchaResolverBuilder(IServiceCollection serviceCollection)
+    public ChallengeResolverBuilder(IServiceCollection serviceCollection)
     {
         ServiceCollection = serviceCollection;
         MessageHandlers = new List<Type>();
@@ -26,38 +26,38 @@ public class CaptchaResolverBuilder : IBuilderWithCaptchaHandlers
 
     internal Func<IServiceProvider, IConsumer>? Factory { get; private set; }
 
-    public CaptchaResolverBuilder SetConsumer(Func<IServiceProvider, IConsumer> factory)
+    public ChallengeResolverBuilder SetConsumer(Func<IServiceProvider, IConsumer> factory)
     {
         Factory = factory;
         return this;
     }
 
-    public CaptchaResolverBuilder SetConsumer<TConsumer>() where TConsumer : IConsumer
+    public ChallengeResolverBuilder SetConsumer<TConsumer>() where TConsumer : IConsumer
     {
         ConsumerType = typeof(TConsumer);
         return this;
     }
 
-    public IBuilderWithCaptchaHandlers AddCaptchaHandler<TCaptcha, TSolution, THandler>(string? handlerName = default)
-        where TCaptcha : ICaptcha
+    public IBuilderWithChallengeHandlers AddChallengeHandler<TChallenge, TSolution, THandler>(string? handlerName = default)
+        where TChallenge : IChallenge
         where TSolution : ISolution
-        where THandler : ICaptchaHandler<TCaptcha, TSolution>
+        where THandler : IChallengeHandler<TChallenge, TSolution>
     {
         MessageHandlers.Add(typeof(THandler));
         return this;
     }
 
-    public IBuilderWithCaptchaHandlers AddCaptchaHandler<TCaptcha, TSolution, THandler>(
-        Func<IServiceProvider, THandler> factory, string? handlerName = default) where TCaptcha : ICaptcha
+    public IBuilderWithChallengeHandlers AddChallengeHandler<TChallenge, TSolution, THandler>(
+        Func<IServiceProvider, THandler> factory, string? handlerName = default) where TChallenge : IChallenge
         where TSolution : ISolution
-        where THandler : ICaptchaHandler<TCaptcha, TSolution>
+        where THandler : IChallengeHandler<TChallenge, TSolution>
     {
         throw new NotImplementedException();
     }
 
-    public IBuilderWithCaptchaHandlers AddCaptchaHandler<TCaptcha, TSolution>(
-        Func<IServiceProvider, TCaptcha, Task<TSolution>> func, string? handlerName = default)
-        where TCaptcha : ICaptcha where TSolution : ISolution
+    public IBuilderWithChallengeHandlers AddChallengeHandler<TChallenge, TSolution>(
+        Func<IServiceProvider, TChallenge, Task<TSolution>> func, string? handlerName = default)
+        where TChallenge : IChallenge where TSolution : ISolution
     {
         throw new NotImplementedException();
     }

@@ -42,13 +42,13 @@
         </None>
         <None Include="..\README.md" Pack="true" PackagePath="\" />
         <None Include="..\LICENSE" Pack="true" PackagePath="" />
+        <Compile Remove="Consumer\ChallengeConsumer.cs" />
+        <None Include="Consumer\ChallengeConsumer.cs" />
+        <Compile Remove="Consumer\IConsumer.cs" />
+        <None Include="Consumer\IConsumer.cs" />
         <Compile Remove="Resolver\CaptchaResolverBuilder.cs" />
         <None Include="Resolver\CaptchaResolverBuilder.cs" />
         <Compile Remove="Resolver\ResolverHostedService.cs" />
         <None Include="Resolver\ResolverHostedService.cs" />
-        <Compile Remove="Consumer\CaptchaConsumer.cs" />
-        <None Include="Consumer\CaptchaConsumer.cs" />
-        <Compile Remove="Consumer\IConsumer.cs" />
-        <None Include="Consumer\IConsumer.cs" />
     </ItemGroup>
 </Project>

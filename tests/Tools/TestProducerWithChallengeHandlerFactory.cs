@@ -1,21 +1,20 @@
 using PassChallenge.Core.Challenges;
+using PassChallenge.Core.Handlers;
 using PassChallenge.Core.Producer;
 using PassChallenge.Core.Solutions;
 using PassChallenge.Core.Solver;
 
 namespace PassChallenge.Core.Tests.Tools;
 
-public class TestProducerWithOneArgument : IProducer
+public class TestProducerWithChallengeHandlerFactory : IProducerWithChallengeHandlerFactory
 {
-    // ReSharper disable once UnusedParameter.Local
-    public TestProducerWithOneArgument(Action action)
+    public void SetChallengeHandlerFactory(IChallengeHandlerFactory challengeHandlerFactory)
     {
     }
 
     public void SetAvailableChallengeAndSolutionStorage(
         IAvailableChallengeAndSolutionStorage availableChallengeAndSolutionStorage)
     {
-        throw new NotImplementedException();
     }
 
     public Task<TSolution> ProduceAndWaitSolution<TChallenge, TSolution>(TChallenge challenge, string? handlerName = default,

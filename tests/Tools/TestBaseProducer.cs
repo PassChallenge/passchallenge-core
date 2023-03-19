@@ -4,17 +4,17 @@ namespace PassChallenge.Core.Tests.Tools;
 
 public class TestBaseProducer : BaseProducer
 {
-    public override string GetDefaultHandlerName<TCaptcha, TSolution>()
+    public override string GetDefaultHandlerName<TChallenge, TSolution>()
     {
         throw new NotImplementedException();
     }
 
-    public override IReadOnlyCollection<string> GetHandlerNames<TCaptcha, TSolution>()
+    public override IReadOnlyCollection<string> GetHandlerNames<TChallenge, TSolution>()
     {
         throw new NotImplementedException();
     }
 
-    public override Task<TSolution> ProduceAndWaitSolution<TCaptcha, TSolution>(TCaptcha captcha,
+    public override Task<TSolution> ProduceAndWaitSolution<TChallenge, TSolution>(TChallenge challenge,
         string? handlerName = default,
         CancellationToken cancellationToken = default)
     {

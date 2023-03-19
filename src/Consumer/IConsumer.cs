@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace KillDNS.CaptchaSolver.Core.Consumer;
+namespace KillDNS.ChallengeSolver.Core.Consumer;
 
 public interface IConsumer
 {

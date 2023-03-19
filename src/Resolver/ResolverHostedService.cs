@@ -2,7 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 
-namespace KillDNS.CaptchaSolver.Core.Resolver;
+namespace KillDNS.ChallengeSolver.Core.Resolver;
 
 //TODO: WIP
 public class ResolverHostedService : IHostedService
