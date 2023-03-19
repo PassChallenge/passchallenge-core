@@ -1,8 +1,8 @@
-using KillDNS.CaptchaSolver.Core.Captcha;
-using KillDNS.CaptchaSolver.Core.Handlers;
-using KillDNS.CaptchaSolver.Core.Solutions;
+using PassChallenge.Core.Captcha;
+using PassChallenge.Core.Handlers;
+using PassChallenge.Core.Solutions;
 
-namespace KillDNS.CaptchaSolver.Core.Tests.Tools;
+namespace PassChallenge.Core.Tests.Tools;
 
 public class TestCaptchaHandlerDescriptorStorage : ICaptchaHandlerDescriptorStorage
 {

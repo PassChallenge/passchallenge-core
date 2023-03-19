@@ -1,10 +1,10 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using KillDNS.CaptchaSolver.Core.Captcha;
-using KillDNS.CaptchaSolver.Core.Solutions;
+using PassChallenge.Core.Captcha;
+using PassChallenge.Core.Solutions;
 
-namespace KillDNS.CaptchaSolver.Core.Handlers;
+namespace PassChallenge.Core.Handlers;
 
 internal class FixedCaptchaHandler<TCaptcha, TSolution> : ICaptchaHandler<TCaptcha, TSolution>
     where TCaptcha : ICaptcha

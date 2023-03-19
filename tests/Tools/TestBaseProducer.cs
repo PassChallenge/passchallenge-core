@@ -1,6 +1,6 @@
-using KillDNS.CaptchaSolver.Core.Producer;
+using PassChallenge.Core.Producer;
 
-namespace KillDNS.CaptchaSolver.Core.Tests.Tools;
+namespace PassChallenge.Core.Tests.Tools;
 
 public class TestBaseProducer : BaseProducer
 {

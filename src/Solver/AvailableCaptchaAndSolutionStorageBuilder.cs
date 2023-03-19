@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using KillDNS.CaptchaSolver.Core.Captcha;
-using KillDNS.CaptchaSolver.Core.Handlers;
-using KillDNS.CaptchaSolver.Core.Solutions;
+using PassChallenge.Core.Captcha;
+using PassChallenge.Core.Handlers;
+using PassChallenge.Core.Solutions;
 
-namespace KillDNS.CaptchaSolver.Core.Solver;
+namespace PassChallenge.Core.Solver;
 
 public class AvailableCaptchaAndSolutionStorageBuilder
 {

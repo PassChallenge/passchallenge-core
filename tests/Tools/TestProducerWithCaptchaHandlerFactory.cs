@@ -1,10 +1,10 @@
-using KillDNS.CaptchaSolver.Core.Captcha;
-using KillDNS.CaptchaSolver.Core.Handlers;
-using KillDNS.CaptchaSolver.Core.Producer;
-using KillDNS.CaptchaSolver.Core.Solutions;
-using KillDNS.CaptchaSolver.Core.Solver;
+using PassChallenge.Core.Captcha;
+using PassChallenge.Core.Handlers;
+using PassChallenge.Core.Producer;
+using PassChallenge.Core.Solutions;
+using PassChallenge.Core.Solver;
 
-namespace KillDNS.CaptchaSolver.Core.Tests.Tools;
+namespace PassChallenge.Core.Tests.Tools;
 
 public class TestProducerWithCaptchaHandlerFactory : IProducerWithCaptchaHandlerFactory
 {

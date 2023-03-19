@@ -1,8 +1,8 @@
-using KillDNS.CaptchaSolver.Core.DependencyInjection;
+using PassChallenge.Core.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
-namespace KillDNS.CaptchaSolver.Core.Tests.DependencyInjection;
+namespace PassChallenge.Core.Tests.DependencyInjection;
 
 public class SolverFactoryServiceDescriptorTests
 {

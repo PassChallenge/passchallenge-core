@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using KillDNS.CaptchaSolver.Core.Captcha;
-using KillDNS.CaptchaSolver.Core.Solutions;
+using PassChallenge.Core.Captcha;
+using PassChallenge.Core.Solutions;
 
-namespace KillDNS.CaptchaSolver.Core.Handlers;
+namespace PassChallenge.Core.Handlers;
 
 public interface ICaptchaHandlerDescriptorStorage
 {

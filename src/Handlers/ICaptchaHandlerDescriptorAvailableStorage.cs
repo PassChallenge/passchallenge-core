@@ -1,6 +1,6 @@
-using KillDNS.CaptchaSolver.Core.Solver;
+using PassChallenge.Core.Solver;
 
-namespace KillDNS.CaptchaSolver.Core.Handlers;
+namespace PassChallenge.Core.Handlers;
 
 public interface ICaptchaHandlerDescriptorAvailableStorage : ICaptchaHandlerDescriptorStorage,
     IAvailableCaptchaAndSolutionStorage

@@ -1,11 +1,11 @@
-using KillDNS.CaptchaSolver.Core.Captcha;
-using KillDNS.CaptchaSolver.Core.Handlers;
-using KillDNS.CaptchaSolver.Core.Solutions;
-using KillDNS.CaptchaSolver.Core.Tests.Tools;
+using PassChallenge.Core.Captcha;
+using PassChallenge.Core.Handlers;
+using PassChallenge.Core.Solutions;
+using PassChallenge.Core.Tests.Tools;
 using Moq;
 using NUnit.Framework;
 
-namespace KillDNS.CaptchaSolver.Core.Tests.Handlers;
+namespace PassChallenge.Core.Tests.Handlers;
 
 public class CaptchaHandlerDescriptorTests
 {

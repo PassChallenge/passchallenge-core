@@ -1,8 +1,8 @@
-using KillDNS.CaptchaSolver.Core.Exceptions;
+using PassChallenge.Core.Exceptions;
 using Moq;
 using NUnit.Framework;
 
-namespace KillDNS.CaptchaSolver.Core.Tests.Exceptions;
+namespace PassChallenge.Core.Tests.Exceptions;
 
 public class CaptchaExceptionTests
 {

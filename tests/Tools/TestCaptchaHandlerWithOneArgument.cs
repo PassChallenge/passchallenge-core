@@ -1,6 +1,6 @@
-using KillDNS.CaptchaSolver.Core.Handlers;
+using PassChallenge.Core.Handlers;
 
-namespace KillDNS.CaptchaSolver.Core.Tests.Tools;
+namespace PassChallenge.Core.Tests.Tools;
 
 public class TestCaptchaHandlerWithOneArgument : ICaptchaHandler<TestCaptcha, TestSolution>
 {

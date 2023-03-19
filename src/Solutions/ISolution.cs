@@ -1,4 +1,4 @@
-namespace KillDNS.CaptchaSolver.Core.Solutions;
+namespace PassChallenge.Core.Solutions;
 
 public interface ISolution
 {

@@ -1,6 +1,6 @@
-using KillDNS.CaptchaSolver.Core.Handlers;
+using PassChallenge.Core.Handlers;
 
-namespace KillDNS.CaptchaSolver.Core.Producer;
+namespace PassChallenge.Core.Producer;
 
 public interface IProducerWithCaptchaHandlerFactory : IProducer
 {

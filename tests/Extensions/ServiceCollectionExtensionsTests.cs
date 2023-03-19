@@ -1,15 +1,15 @@
-using KillDNS.CaptchaSolver.Core.Captcha;
-using KillDNS.CaptchaSolver.Core.Extensions;
-using KillDNS.CaptchaSolver.Core.Handlers;
-using KillDNS.CaptchaSolver.Core.Producer;
-using KillDNS.CaptchaSolver.Core.Solutions;
-using KillDNS.CaptchaSolver.Core.Solver;
-using KillDNS.CaptchaSolver.Core.Tests.Tools;
+using PassChallenge.Core.Captcha;
+using PassChallenge.Core.Extensions;
+using PassChallenge.Core.Handlers;
+using PassChallenge.Core.Producer;
+using PassChallenge.Core.Solutions;
+using PassChallenge.Core.Solver;
+using PassChallenge.Core.Tests.Tools;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
 
-namespace KillDNS.CaptchaSolver.Core.Tests.Extensions;
+namespace PassChallenge.Core.Tests.Extensions;
 
 public class ServiceCollectionExtensionsTests
 {

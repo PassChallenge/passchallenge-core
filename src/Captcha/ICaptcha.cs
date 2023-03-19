@@ -1,4 +1,4 @@
-namespace KillDNS.CaptchaSolver.Core.Captcha;
+namespace PassChallenge.Core.Captcha;
 
 public interface ICaptcha
 {

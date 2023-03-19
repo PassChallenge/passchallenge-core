@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace KillDNS.CaptchaSolver.Core.Exceptions;
+namespace PassChallenge.Core.Exceptions;
 
 public class CaptchaException : Exception
 {

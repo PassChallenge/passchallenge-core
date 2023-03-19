@@ -1,4 +1,4 @@
-namespace KillDNS.CaptchaSolver.Core.Handlers;
+namespace PassChallenge.Core.Handlers;
 
 public interface IBuilderWithCaptchaHandlers
 {

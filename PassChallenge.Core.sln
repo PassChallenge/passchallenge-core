@@ -1,8 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KillDNS.CaptchaSolver.Core", "src\KillDNS.CaptchaSolver.Core.csproj", "{0A7D6234-5B20-45AC-BE41-51A4CDC8E719}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PassChallenge.Core", "src\PassChallenge.Core.csproj", "{0A7D6234-5B20-45AC-BE41-51A4CDC8E719}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KillDNS.CaptchaSolver.Core.Tests", "tests\KillDNS.CaptchaSolver.Core.Tests.csproj", "{B361D68C-5F3F-41D8-AE05-686C9AC786EF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PassChallenge.Core.Tests", "tests\PassChallenge.Core.Tests.csproj", "{B361D68C-5F3F-41D8-AE05-686C9AC786EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

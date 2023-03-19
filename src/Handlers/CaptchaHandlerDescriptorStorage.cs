@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using KillDNS.CaptchaSolver.Core.Captcha;
-using KillDNS.CaptchaSolver.Core.Solutions;
+using PassChallenge.Core.Captcha;
+using PassChallenge.Core.Solutions;
 
-namespace KillDNS.CaptchaSolver.Core.Handlers;
+namespace PassChallenge.Core.Handlers;
 
 internal class CaptchaHandlerDescriptorStorage : ICaptchaHandlerDescriptorAvailableStorage
 {

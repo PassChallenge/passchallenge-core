@@ -1,6 +1,6 @@
 using System;
 
-namespace KillDNS.CaptchaSolver.Core.Captcha;
+namespace PassChallenge.Core.Captcha;
 
 public class PictureCaptcha : ICaptcha
 {

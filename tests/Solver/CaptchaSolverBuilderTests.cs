@@ -1,10 +1,10 @@
-using KillDNS.CaptchaSolver.Core.Producer;
-using KillDNS.CaptchaSolver.Core.Solver;
-using KillDNS.CaptchaSolver.Core.Tests.Tools;
+using PassChallenge.Core.Producer;
+using PassChallenge.Core.Solver;
+using PassChallenge.Core.Tests.Tools;
 using Moq;
 using NUnit.Framework;
 
-namespace KillDNS.CaptchaSolver.Core.Tests.Solver;
+namespace PassChallenge.Core.Tests.Solver;
 
 public class CaptchaSolverBuilderTests
 {

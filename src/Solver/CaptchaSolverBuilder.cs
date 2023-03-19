@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using KillDNS.CaptchaSolver.Core.Producer;
 using Microsoft.Extensions.DependencyInjection;
+using PassChallenge.Core.Producer;
 
-namespace KillDNS.CaptchaSolver.Core.Solver;
+namespace PassChallenge.Core.Solver;
 
 public class CaptchaSolverBuilder<TProducer> where TProducer : IProducer
 {

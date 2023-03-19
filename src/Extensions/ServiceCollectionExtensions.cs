@@ -1,11 +1,11 @@
 using System;
 using System.Linq;
-using KillDNS.CaptchaSolver.Core.DependencyInjection;
-using KillDNS.CaptchaSolver.Core.Producer;
-using KillDNS.CaptchaSolver.Core.Solver;
 using Microsoft.Extensions.DependencyInjection;
+using PassChallenge.Core.DependencyInjection;
+using PassChallenge.Core.Producer;
+using PassChallenge.Core.Solver;
 
-namespace KillDNS.CaptchaSolver.Core.Extensions;
+namespace PassChallenge.Core.Extensions;
 
 public static class ServiceCollectionExtensions
 {

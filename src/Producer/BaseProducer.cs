@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using KillDNS.CaptchaSolver.Core.Captcha;
-using KillDNS.CaptchaSolver.Core.Solutions;
-using KillDNS.CaptchaSolver.Core.Solver;
+using PassChallenge.Core.Captcha;
+using PassChallenge.Core.Solutions;
+using PassChallenge.Core.Solver;
 
-namespace KillDNS.CaptchaSolver.Core.Producer;
+namespace PassChallenge.Core.Producer;
 
 public abstract class BaseProducer : IProducer
 {

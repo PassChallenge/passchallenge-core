@@ -1,9 +1,9 @@
 using System;
-using KillDNS.CaptchaSolver.Core.Handlers;
-using KillDNS.CaptchaSolver.Core.Producer;
-using KillDNS.CaptchaSolver.Core.Solver;
+using PassChallenge.Core.Handlers;
+using PassChallenge.Core.Producer;
+using PassChallenge.Core.Solver;
 
-namespace KillDNS.CaptchaSolver.Core.Extensions;
+namespace PassChallenge.Core.Extensions;
 
 public static class CaptchaSolverBuilderExtensions
 {
