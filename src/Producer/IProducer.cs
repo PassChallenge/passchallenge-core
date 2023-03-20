@@ -1,25 +1,25 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using KillDNS.CaptchaSolver.Core.Captcha;
-using KillDNS.CaptchaSolver.Core.Solutions;
-using KillDNS.CaptchaSolver.Core.Solver;
+using PassChallenge.Core.Challenges;
+using PassChallenge.Core.Solutions;
+using PassChallenge.Core.Solver;
 
-namespace KillDNS.CaptchaSolver.Core.Producer;
+namespace PassChallenge.Core.Producer;
 
 public interface IProducer
 {
-    void SetAvailableCaptchaAndSolutionStorage(IAvailableCaptchaAndSolutionStorage availableCaptchaAndSolutionStorage);
+    void SetAvailableChallengeAndSolutionStorage(IAvailableChallengeAndSolutionStorage availableChallengeAndSolutionStorage);
 
-    Task<TSolution> ProduceAndWaitSolution<TCaptcha, TSolution>(TCaptcha captcha, string? handlerName = default,
-        CancellationToken cancellationToken = default) where TCaptcha : ICaptcha
+    Task<TSolution> ProduceAndWaitSolution<TChallenge, TSolution>(TChallenge challenge, string? handlerName = default,
+        CancellationToken cancellationToken = default) where TChallenge : IChallenge
         where TSolution : ISolution;
 
-    bool CanProduce<TCaptcha, TSolution>(string? handlerName = default)
-        where TCaptcha : ICaptcha where TSolution : ISolution;
+    bool CanProduce<TChallenge, TSolution>(string? handlerName = default)
+        where TChallenge : IChallenge where TSolution : ISolution;
 
-    string GetDefaultHandlerName<TCaptcha, TSolution>() where TCaptcha : ICaptcha where TSolution : ISolution;
+    string GetDefaultHandlerName<TChallenge, TSolution>() where TChallenge : IChallenge where TSolution : ISolution;
 
-    IReadOnlyCollection<string> GetHandlerNames<TCaptcha, TSolution>()
-        where TCaptcha : ICaptcha where TSolution : ISolution;
+    IReadOnlyCollection<string> GetHandlerNames<TChallenge, TSolution>()
+        where TChallenge : IChallenge where TSolution : ISolution;
 }

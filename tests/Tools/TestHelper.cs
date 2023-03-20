@@ -2,7 +2,7 @@ using System.Collections;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 
-namespace KillDNS.CaptchaSolver.Core.Tests.Tools;
+namespace PassChallenge.Core.Tests.Tools;
 
 public static class TestHelper
 {

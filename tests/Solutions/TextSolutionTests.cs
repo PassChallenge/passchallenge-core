@@ -1,7 +1,7 @@
-using KillDNS.CaptchaSolver.Core.Solutions;
+using PassChallenge.Core.Solutions;
 using NUnit.Framework;
 
-namespace KillDNS.CaptchaSolver.Core.Tests.Solutions;
+namespace PassChallenge.Core.Tests.Solutions;
 
 public class TextSolutionTests
 {

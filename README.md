@@ -1,2 +1,2 @@
-# captcha-solver-core
-The core library provides the foundation for custom captcha solvers/resolvers.
+# passchallenge-core
+The core library provides the foundation for handling challenges: captcha, cloudflare, etc.

@@ -1,7 +1,7 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace KillDNS.CaptchaSolver.Core.DependencyInjection;
+namespace PassChallenge.Core.DependencyInjection;
 
 internal class SolverFactoryServiceDescriptor : ServiceDescriptor
 {
