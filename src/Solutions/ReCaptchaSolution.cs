@@ -16,7 +16,7 @@ public class ReCaptchaSolution : ISolution
 
     public SolutionResultType ResultType { get; }
 
-    public static ReCaptchaSolution Error(string errorMessage)
+    public static ReCaptchaSolution ErrorSolution(string errorMessage)
     {
         ReCaptchaSolution result = new(null, SolutionResultType.Error)
         {

@@ -18,9 +18,6 @@ public class ChallengeHandlerDescriptor
     private ChallengeHandlerDescriptor(Type challengeType, Type solutionType, Type handlerType,
         string? handlerName = default) : this(challengeType, solutionType, handlerName)
     {
-        if (handlerType == null)
-            throw new ArgumentNullException(nameof(handlerType));
-        
         if (handlerType.IsInterface)
             throw new ArgumentException("The handler must be a class.");
 

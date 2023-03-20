@@ -5,12 +5,12 @@
         <LangVersion>default</LangVersion>
         <Nullable>enable</Nullable>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Version>0.0.8</Version>
+        <Version>0.0.9</Version>
         <Title>PassChallenge.Core</Title>
         <Authors>Kirill Danshin</Authors>
         <Description>The core library provides the foundation for handling challenges: captcha, cloudflare, etc.</Description>
         <PackageIcon>logo_128.png</PackageIcon>
-        <AssemblyVersion>0.0.8</AssemblyVersion>
+        <AssemblyVersion>0.0.9</AssemblyVersion>
         <Copyright>Copyright (c) 2023 Kirill Danshin</Copyright>
         <RepositoryUrl>https://github.com/PassChallenge/passchallenge-core</RepositoryUrl>
         <PackageProjectUrl>https://github.com/PassChallenge/passchallenge-core</PackageProjectUrl>

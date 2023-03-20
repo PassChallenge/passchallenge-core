@@ -9,8 +9,8 @@ public class PictureCaptchaTests
     public void Constructor_Is_Correct()
     {
         byte[] expectedValue = Array.Empty<byte>();
-        PictureCaptcha Challenge = new(expectedValue);
-        Assert.That(Challenge.ImageData, Is.EqualTo(expectedValue));
+        PictureCaptcha challenge = new(expectedValue);
+        Assert.That(challenge.ImageData, Is.EqualTo(expectedValue));
     }
 
     [Test]
