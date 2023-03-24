@@ -41,7 +41,7 @@ public class ServiceCollectionExtensionsTests
     [Test]
     public void AddChallengeSolver_DefaultSolver_When_ServiceCollection_Is_Null_Throws_ArgumentNullException()
     {
-        Assert.Throws<ArgumentNullException>(() => ServiceCollectionExtensions.AddChallengeSolver<TestProducer>(null!));
+        Assert.Throws<ArgumentNullException>(() => ChallengeSolverExtensions.AddChallengeSolver<TestProducer>(null!));
     }
 
     [Test]
@@ -72,7 +72,7 @@ public class ServiceCollectionExtensionsTests
     public void AddSolver_DefaultSolver_When_ServiceCollection_Is_Null_Throws_ArgumentNullException()
     {
         Assert.Throws<ArgumentNullException>(() =>
-            ServiceCollectionExtensions.AddChallengeSolver<TestProducer>(
+            ChallengeSolverExtensions.AddChallengeSolver<TestProducer>(
                 null!, _ => { }));
     }
 

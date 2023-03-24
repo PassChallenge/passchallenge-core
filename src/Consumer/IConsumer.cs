@@ -1,10 +1,9 @@
 using System.Threading.Tasks;
 
-namespace KillDNS.ChallengeSolver.Core.Consumer;
+namespace PassChallenge.Core.Consumer;
 
 public interface IConsumer
 {
+    string Name { get; }
     Task Start();
-
-    Task Stop();
 }
